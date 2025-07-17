@@ -18,5 +18,6 @@ export const environment = {
   },
   cache: {
     ttl: 300000 // 5 minutes
-  }
+  },
+  // NOTE: For production, apiUrl should be set to the deployed backend URL in environment.prod.ts
 }; 
