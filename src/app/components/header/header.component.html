@@ -1,0 +1,168 @@
+<header class="header bg-black text-white sticky top-0 z-50">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <a routerLink="/home" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+            <span class="text-black font-bold text-xl">H</span>
+          </div>
+          <span class="text-2xl font-bold text-white">HADES STUDIO</span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden lg:flex items-center space-x-8">
+        <a routerLink="/products" [queryParams]="{category: 'tops'}" class="nav-link">TOPS</a>
+        <a routerLink="/products" [queryParams]="{category: 'bottoms'}" class="nav-link">BOTTOMS</a>
+        <a routerLink="/products" [queryParams]="{category: 'outerwears'}" class="nav-link">OUTERWEARS</a>
+        <a routerLink="/products" [queryParams]="{category: 'underwears'}" class="nav-link">UNDERWEARS</a>
+        <a routerLink="/products" [queryParams]="{category: 'bags'}" class="nav-link">BAGS</a>
+        <a routerLink="/products" [queryParams]="{category: 'accessories'}" class="nav-link">ACCESSORIES</a>
+        <a routerLink="/products" [queryParams]="{sale: 'true'}" class="nav-link">SALE</a>
+        <a routerLink="/recruitment" class="nav-link">RECRUITMENT</a>
+      </nav>
+
+      <!-- Right Side Actions -->
+      <div class="flex items-center space-x-4">
+        <!-- Search -->
+        <div class="relative hidden md:block">
+          <input 
+            type="text" 
+            placeholder="Tìm kiếm..." 
+            class="search-input"
+            [(ngModel)]="searchQuery"
+            (input)="onSearch()"
+          >
+          <button class="search-btn">
+            <mat-icon>search</mat-icon>
+          </button>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="hidden md:flex items-center space-x-2">
+          <button class="lang-btn" [class.active]="currentLang === 'en'" (click)="setLanguage('en')">EN</button>
+          <span class="text-gray-400">|</span>
+          <button class="lang-btn" [class.active]="currentLang === 'vi'" (click)="setLanguage('vi')">VI</button>
+        </div>
+
+        <!-- Cart -->
+        <button class="cart-btn relative" (click)="goToCart()" *ngIf="isLoggedIn">
+          <mat-icon>shopping_cart</mat-icon>
+          <span *ngIf="cartItemCount > 0" class="cart-badge">{{ cartItemCount }}</span>
+        </button>
+
+        <!-- User Greeting and Auth Button: Always visible, rightmost -->
+        <div class="flex items-center space-x-2 user-greeting-block" style="min-width: 180px; justify-content: flex-end;">
+          <span *ngIf="isLoggedIn" class="hello-user" style="font-weight: 600; color: #fff;">Hello, {{ user?.firstName || user?.username }}</span>
+          <button *ngIf="isLoggedIn" class="logout-btn" style="margin-left: 8px; background: #fff; color: #111; border-radius: 4px; padding: 4px 12px; font-weight: 600;" (click)="logout()">Logout</button>
+          <button *ngIf="!isLoggedIn" class="login-btn" style="margin-left: 8px; background: #fff; color: #111; border-radius: 4px; padding: 4px 12px; font-weight: 600;" routerLink="/login">Login</button>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn lg:hidden" (click)="toggleMobileMenu()">
+          <mat-icon>{{ showMobileMenu ? 'close' : 'menu' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div *ngIf="showMobileMenu" class="mobile-menu lg:hidden">
+      <nav class="mobile-nav">
+        <a routerLink="/products" [queryParams]="{category: 'tops'}" class="mobile-nav-link">TOPS</a>
+        <a routerLink="/products" [queryParams]="{category: 'bottoms'}" class="mobile-nav-link">BOTTOMS</a>
+        <a routerLink="/products" [queryParams]="{category: 'outerwears'}" class="mobile-nav-link">OUTERWEARS</a>
+        <a routerLink="/products" [queryParams]="{category: 'underwears'}" class="mobile-nav-link">UNDERWEARS</a>
+        <a routerLink="/products" [queryParams]="{category: 'bags'}" class="mobile-nav-link">BAGS</a>
+        <a routerLink="/products" [queryParams]="{category: 'accessories'}" class="mobile-nav-link">ACCESSORIES</a>
+        <a routerLink="/products" [queryParams]="{sale: 'true'}" class="mobile-nav-link">SALE</a>
+        <a routerLink="/recruitment" class="mobile-nav-link">RECRUITMENT</a>
+      </nav>
+      
+      <!-- Mobile Search -->
+      <div class="mobile-search">
+        <input 
+          type="text" 
+          placeholder="Tìm kiếm..." 
+          class="mobile-search-input"
+          [(ngModel)]="searchQuery"
+          (input)="onSearch()"
+        >
+      </div>
+
+      <!-- Mobile Language Selector -->
+      <div class="mobile-lang">
+        <button class="mobile-lang-btn" [class.active]="currentLang === 'en'" (click)="setLanguage('en')">EN</button>
+        <button class="mobile-lang-btn" [class.active]="currentLang === 'vi'" (click)="setLanguage('vi')">VI</button>
+      </div>
+
+      <!-- Mobile Auth -->
+      <div class="mobile-auth">
+        <div *ngIf="!isLoggedIn" class="mobile-auth-buttons">
+          <button class="mobile-login-btn" routerLink="/login">Đăng nhập</button>
+          <button class="mobile-register-btn" routerLink="/register">Đăng ký</button>
+        </div>
+        <div *ngIf="isLoggedIn" class="mobile-user-info">
+          <div class="mobile-user-details">
+            <span class="mobile-user-name">{{ user?.firstName }} {{ user?.lastName }}</span>
+            <span class="mobile-user-role">{{ user?.roles?.[0]?.name || 'User' }}</span>
+          </div>
+          <div class="mobile-user-actions">
+            <button *ngIf="isAdmin()" class="mobile-admin-btn" routerLink="/admin/products">Admin Panel</button>
+            <button class="mobile-logout-btn" (click)="logout()">Đăng xuất</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Cart Drawer -->
+<div *ngIf="showCart" class="cart-drawer-overlay" (click)="closeCart()"></div>
+<div *ngIf="showCart" class="cart-drawer">
+  <div class="cart-header">
+    <h3 class="cart-title">Giỏ hàng</h3>
+    <button class="cart-close" (click)="closeCart()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <div class="cart-content">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <mat-icon class="empty-cart-icon">shopping_cart</mat-icon>
+      <p class="empty-cart-text">Hiện chưa có sản phẩm</p>
+      <button class="btn btn-primary" (click)="closeCart()">Bắt đầu mua sắm</button>
+    </div>
+    
+    <div *ngIf="cartItems.length > 0" class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <img [src]="(item.product && item.product.images && item.product.images[0] && item.product.images[0].imageUrl) || 'assets/placeholder.jpg'" [alt]="item.product?.name" class="cart-item-image">
+        <div class="cart-item-details">
+          <h4 class="cart-item-name">{{ item.product?.name }}</h4>
+          <p class="cart-item-price">{{ item.price | currency:'VND':'symbol':'1.0-0' }}</p>
+          <div class="cart-item-actions">
+            <div class="quantity-controls">
+              <button class="qty-btn" (click)="updateQuantity(item, item.quantity - 1)">-</button>
+              <span class="qty-display">{{ item.quantity }}</span>
+              <button class="qty-btn" (click)="updateQuantity(item, item.quantity + 1)">+</button>
+            </div>
+            <button class="remove-btn" (click)="removeFromCart(item)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div *ngIf="cartItems.length > 0" class="cart-footer">
+    <div class="cart-total">
+      <span class="total-label">TỔNG TIỀN:</span>
+      <span class="total-amount">{{ cartTotal | currency:'VND':'symbol':'1.0-0' }}</span>
+    </div>
+    <div class="cart-actions">
+      <button class="btn btn-outline" (click)="viewCart()">Xem giỏ hàng</button>
+      <button class="btn btn-primary" (click)="checkout()">Thanh toán</button>
+    </div>
+  </div>
+</div> 

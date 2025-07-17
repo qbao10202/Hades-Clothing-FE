@@ -1,0 +1,229 @@
+<div class="category-form-modal">
+  <div class="modal-header">
+    <div class="breadcrumb">
+      <span class="breadcrumb-item">Home</span>
+      <mat-icon>chevron_right</mat-icon>
+      <span class="breadcrumb-item">Categories</span>
+      <mat-icon>chevron_right</mat-icon>
+      <span class="breadcrumb-item active">{{ breadcrumbLabel }}</span>
+    </div>
+    <h2 class="modal-title">{{ modalTitle }}</h2>
+    <button class="close-button" mat-icon-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSave()">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button 
+          type="button" 
+          class="tab-button" 
+          [class.active]="activeTab === 'general'"
+          (click)="setActiveTab('general')"
+        >
+          General
+        </button>
+        <button 
+          type="button" 
+          class="tab-button" 
+          [class.active]="activeTab === 'others'"
+          (click)="setActiveTab('others')"
+        >
+          Others
+        </button>
+      </div>
+
+      <!-- General Tab Content -->
+      <div class="tab-content" *ngIf="activeTab === 'general'">
+        <!-- Parent Category -->
+        <div class="form-group">
+          <label for="parentCategory">Parent Category</label>
+          <select 
+            id="parentCategory"
+            formControlName="parentCategory"
+            class="form-control"
+          >
+            <option value="">Accessories / Bags / Collection 2017</option>
+            <option *ngFor="let category of parentCategories" [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Category Name -->
+        <div class="form-group">
+          <label for="categoryName">Category Name *</label>
+          <input 
+            id="categoryName"
+            type="text"
+            formControlName="categoryName"
+            class="form-control"
+            placeholder="Enter category name"
+            [class.is-invalid]="isFieldInvalid('categoryName')"
+          />
+          <div *ngIf="isFieldInvalid('categoryName')" class="invalid-feedback">
+            {{ getFieldError('categoryName') }}
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description</label>
+          <div class="rich-text-editor">
+            <div class="editor-toolbar">
+              <select class="font-select">
+                <option>Circular STD</option>
+              </select>
+              <div class="toolbar-divider"></div>
+              <button type="button" class="toolbar-btn" title="Bold">
+                <strong>B</strong>
+              </button>
+              <button type="button" class="toolbar-btn" title="Italic">
+                <em>I</em>
+              </button>
+              <button type="button" class="toolbar-btn" title="Underline">
+                <u>U</u>
+              </button>
+              <button type="button" class="toolbar-btn" title="Strike">
+                <s>S</s>
+              </button>
+              <div class="toolbar-divider"></div>
+              <button type="button" class="toolbar-btn" title="Text Color">
+                <mat-icon>format_color_text</mat-icon>
+              </button>
+              <button type="button" class="toolbar-btn" title="Background Color">
+                <mat-icon>format_color_fill</mat-icon>
+              </button>
+              <div class="toolbar-divider"></div>
+              <button type="button" class="toolbar-btn" title="Bullet List">
+                <mat-icon>format_list_bulleted</mat-icon>
+              </button>
+              <button type="button" class="toolbar-btn" title="Numbered List">
+                <mat-icon>format_list_numbered</mat-icon>
+              </button>
+              <button type="button" class="toolbar-btn" title="Align Left">
+                <mat-icon>format_align_left</mat-icon>
+              </button>
+              <button type="button" class="toolbar-btn" title="Align Center">
+                <mat-icon>format_align_center</mat-icon>
+              </button>
+              <button type="button" class="toolbar-btn" title="Link">
+                <mat-icon>link</mat-icon>
+              </button>
+              <button type="button" class="toolbar-btn" title="Image">
+                <mat-icon>image</mat-icon>
+              </button>
+            </div>
+            <textarea 
+              id="description"
+              formControlName="description"
+              class="editor-content"
+              placeholder="s.Oliver is a family-owned German fashion company located in Rottendorf, Bavaria. The company sells apparel, shoes, accessories, jewellery, fragrances and eyewear."
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- Website -->
+        <div class="form-group">
+          <label for="website">Website</label>
+          <div class="input-group">
+            <span class="input-prefix">http://</span>
+            <input 
+              id="website"
+              type="text" 
+              formControlName="website"
+              class="form-control"
+              placeholder="www.musamind.com"
+            />
+          </div>
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+          <label>Image</label>
+          <div class="image-upload-section">
+            <div class="image-preview-container">
+              <img 
+                [src]="imagePreview || 'assets/default-category.jpg'" 
+                alt="Category Image"
+                class="image-preview"
+              />
+            </div>
+            <div class="upload-info">
+              <h4>Upload a category image</h4>
+              <p>SVG, PNG, JPG or GIF (max. 300x300px)</p>
+              <input 
+                type="file" 
+                (change)="onFileSelected($event)" 
+                accept="image/*"
+                class="file-input"
+                id="imageInput"
+              />
+              <label for="imageInput" class="upload-button">
+                Choose Image
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info Link -->
+        <div class="form-group">
+          <label for="infoLink">Info Link</label>
+          <input 
+            id="infoLink"
+            type="text" 
+            formControlName="infoLink"
+            class="form-control"
+            placeholder="Use it for icon chart or other info related to this option that will open in popup."
+          />
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+          <label for="status">Status</label>
+          <select 
+            id="status"
+            formControlName="status"
+            class="form-control"
+          >
+            <option [value]="true">Visible</option>
+            <option [value]="false">Hidden</option>
+          </select>
+          <mat-icon class="info-icon" title="Status information">info</mat-icon>
+        </div>
+
+        <!-- Sort Order -->
+        <div class="form-group">
+          <label for="sortOrder">Sort Order</label>
+          <input 
+            id="sortOrder"
+            type="number" 
+            formControlName="sortOrder"
+            class="form-control"
+            placeholder="Enter sort order"
+          />
+        </div>
+
+        <!-- Image Upload -->
+        <!-- <div class="form-group">
+          <label for="image">Category Image</label>
+          <input 
+            id="image"
+            type="file" 
+            formControlName="image"
+            class="form-control"
+            accept="image/*"
+            (change)="onImageChange($event)"
+          />
+        </div> -->
+
+        <!-- Form Actions -->
+        <div class="form-actions-row">
+          <button type="submit" class="save-btn" [disabled]="categoryForm.invalid">{{ isEdit ? 'Save' : 'Create' }}</button>
+          <button type="button" class="cancel-btn" (click)="onCancel()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>

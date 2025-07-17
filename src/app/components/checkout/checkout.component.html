@@ -1,0 +1,154 @@
+<div class="checkout-page">
+  <button class="floating-home-btn" mat-fab color="primary" (click)="goToHome()">
+    <mat-icon>home</mat-icon>
+  </button>
+  <div class="container">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+      <span routerLink="/cart">Cart</span>
+      <mat-icon>chevron_right</mat-icon>
+      <span>Payment</span>
+    </div>
+
+    <div *ngIf="cart.items.length > 0; else emptyCart" class="checkout-content">
+      <div class="checkout-form">
+        <h2>Shipping Address</h2>
+        <form [formGroup]="checkoutForm" (ngSubmit)="processCheckout()">
+          <div class="form-row">
+            <div class="half-width">
+              <label for="firstName">First Name*</label>
+              <input id="firstName" type="text" formControlName="firstName" required />
+            </div>
+            <div class="half-width">
+              <label for="lastName">Last Name*</label>
+              <input id="lastName" type="text" formControlName="lastName" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="full-width">
+              <label for="email">Email*</label>
+              <input id="email" type="email" formControlName="email" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="full-width">
+              <label for="phone">Phone number*</label>
+              <input id="phone" type="tel" formControlName="phone" pattern="[0-9]*" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="half-width">
+              <label for="city">City*</label>
+              <input id="city" type="text" formControlName="city" required />
+            </div>
+            <div class="half-width">
+              <label for="state">State*</label>
+              <input id="state" type="text" formControlName="state" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="full-width">
+              <label for="zipCode">Zip Code*</label>
+              <input id="zipCode" type="text" formControlName="zipCode" required />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="full-width">
+              <label for="description">Description</label>
+              <textarea id="description" formControlName="description" rows="3" placeholder="Enter a description..."></textarea>
+            </div>
+          </div>
+          <h3>Shipping Method</h3>
+          <div class="shipping-methods">
+            <div class="shipping-option">
+              <input type="radio" id="shippingFree" formControlName="shippingMethod" value="free" />
+              <label for="shippingFree">
+                <span class="shipping-name">Free Shipping</span>
+                <span class="shipping-time">7-20 Days</span>
+                <span class="shipping-cost">0₫</span>
+              </label>
+            </div>
+            <div class="shipping-option">
+              <input type="radio" id="shippingExpress" formControlName="shippingMethod" value="express" />
+              <label for="shippingExpress">
+                <span class="shipping-name">Express Shipping</span>
+                <span class="shipping-time">1-3 Days</span>
+                <span class="shipping-cost">9,000₫</span>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3>Your Cart</h3>
+        <div class="cart-items">
+          <div *ngFor="let item of cart.items" class="cart-item">
+            <div class="item-image">
+              <img [src]="getProductImage(item)" [alt]="getProductName(item)" (error)="onImageError($event)">
+              <span class="item-quantity">{{ item.quantity }}</span>
+            </div>
+            <div class="item-details">
+              <h4>{{ getProductName(item) }}</h4>
+              <p>{{ getProductCategory(item) }}</p>
+            </div>
+            <div class="item-price">
+              {{ formatCurrencyVND(item.price * item.quantity) }}
+            </div>
+          </div>
+        </div>
+        
+        <div class="discount-section">
+          <div class="discount-row">
+            <label for="discountCode" class="discount-label">Discount code</label>
+            <input id="discountCode" type="text" [(ngModel)]="discountCode" class="discount-input" placeholder="Enter code..." />
+            <button type="button" class="apply-btn" (click)="applyDiscount()">Apply</button>
+          </div>
+        </div>
+        
+        <div class="order-totals">
+          <div class="total-line">
+            <span>Subtotal</span>
+            <span>{{ formatCurrencyVND(cart.subtotal) }}</span>
+          </div>
+          <div class="total-line">
+            <span>Shipping</span>
+            <span>{{ cart.shippingAmount === 0 ? 'Free' : formatCurrencyVND(cart.shippingAmount) }}</span>
+          </div>
+          <div class="total-line">
+            <span>Estimated taxes</span>
+            <span>{{ formatCurrencyVND(cart.taxAmount) }}</span>
+          </div>
+          <div class="total-line final-total">
+            <span>Total</span>
+            <span>{{ formatCurrencyVND(cart.totalAmount) }}</span>
+          </div>
+        </div>
+        
+        <div class="checkout-actions">
+          <button 
+            mat-raised-button 
+            class="checkout-btn"
+            (click)="processCheckout()"
+            [disabled]="!checkoutForm.valid || loading">
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            <span *ngIf="!loading">Place Order</span>
+            <span *ngIf="loading">Processing...</span>
+            <mat-icon *ngIf="!loading">shopping_cart_checkout</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <h2>Your cart is empty</h2>
+        <p>Add some products to your cart before proceeding to checkout.</p>
+        <button mat-raised-button color="primary" routerLink="/products">
+          Browse Products
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>

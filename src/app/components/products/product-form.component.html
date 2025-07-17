@@ -1,0 +1,89 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="product-form-mat">
+  <h2 mat-dialog-title>{{ data.product ? 'Edit Product' : 'Add Product' }}</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Product Code</mat-label>
+      <input matInput formControlName="productCode" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Product Name</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Slug</mat-label>
+      <input matInput formControlName="slug" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="3"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" formControlName="price" required min="0">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cost</mat-label>
+      <input matInput type="number" formControlName="cost" required min="0">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="categoryId" required>
+        <mat-option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Stock Quantity</mat-label>
+      <input matInput type="number" formControlName="stockQuantity" required min="0">
+    </mat-form-field>
+
+    <mat-checkbox formControlName="isActive">Active</mat-checkbox>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Tax Rate (%)</mat-label>
+      <input matInput type="number" formControlName="taxRate" min="0">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Min Stock Level</mat-label>
+      <input matInput type="number" formControlName="minStockLevel" min="0">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Max Stock Level</mat-label>
+      <input matInput type="number" formControlName="maxStockLevel" min="0">
+    </mat-form-field>
+
+    <div class="image-upload-section">
+      <label>Product Image</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*">
+      <div *ngIf="imagePreview" class="image-preview">
+        <img [src]="imagePreview" alt="Image Preview" style="max-width: 100%; max-height: 180px; margin-top: 8px; border-radius: 4px;" />
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" type="submit" [disabled]="form.invalid">{{ data.product ? 'Save' : 'Add' }}</button>
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  </mat-dialog-actions>
+</form>
+
+<style>
+.product-form-mat {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+}
+.full-width {
+  width: 100%;
+}
+.image-upload-section {
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+}
+</style> 

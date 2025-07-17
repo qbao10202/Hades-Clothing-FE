@@ -1,0 +1,144 @@
+<div class="register-page">
+  <div class="register-container">
+    <div class="register-left">
+  
+        <img src="assets/login_picture.jpg" alt="Register Illustration" />
+ 
+    </div>
+    
+    <div class="register-right">
+      <div class="register-form-container">
+        <div class="brand-header">
+          <div class="brand-logo">
+            <mat-icon>chair</mat-icon>
+            <h1>HADES</h1>
+          </div>
+        </div>
+        
+        <div class="form-header">
+          <h2>Create Account</h2>
+        </div>
+        
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                formControlName="firstName"
+                placeholder="James"
+                class="form-control"
+                [class.error]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+              />
+              <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" class="error-message">
+                First name is required
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                placeholder="Carter"
+                class="form-control"
+                [class.error]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+              />
+              <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" class="error-message">
+                Last name is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              placeholder="jamescarter@gmail.com"
+              class="form-control"
+              [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+            />
+            <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
+              <span *ngIf="registerForm.get('email')?.hasError('required')">Email is required</span>
+              <span *ngIf="registerForm.get('email')?.hasError('email')">Please enter a valid email</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              placeholder="jamescarter"
+              class="form-control"
+              [class.error]="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+            />
+            <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error-message">
+              <span *ngIf="registerForm.get('username')?.hasError('required')">Username is required</span>
+              <span *ngIf="registerForm.get('username')?.hasError('minlength')">Username must be at least 3 characters</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-input">
+              <input
+                [type]="hidePassword ? 'password' : 'text'"
+                id="password"
+                formControlName="password"
+                placeholder="••••••••"
+                class="form-control"
+                [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="hidePassword = !hidePassword"
+              >
+                <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error-message">
+              <span *ngIf="registerForm.get('password')?.hasError('required')">Password is required</span>
+              <span *ngIf="registerForm.get('password')?.hasError('minlength')">Password must be at least 6 characters</span>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="checkbox-container">
+              <input
+                type="checkbox"
+                formControlName="agreeToTerms"
+                class="checkbox-input"
+              />
+              <span class="checkbox-custom"></span>
+              I agree to the <a href="javascript:void(0)">terms of service</a> and <a href="javascript:void(0)">privacy policy</a>
+            </label>
+            <div *ngIf="registerForm.get('agreeToTerms')?.invalid && registerForm.get('agreeToTerms')?.touched" class="error-message">
+              You must agree to the terms of service and privacy policy
+            </div>
+          </div>
+          
+          <button
+            type="submit"
+            class="signup-btn"
+            [disabled]="registerForm.invalid || loading"
+          >
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            <span *ngIf="!loading">Sign Up</span>
+          </button>
+          
+          <div class="signin-link">
+            <span>Already Have an account? </span>
+            <a href="javascript:void(0)" (click)="goToLogin()">Sign In</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

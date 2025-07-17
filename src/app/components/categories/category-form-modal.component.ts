@@ -1,0 +1,232 @@
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CategoryService } from '../../services/category.service';
+import { Category } from '../../models';
+import { environment } from '../../../environments/environment';
+
+@Component({
+  selector: 'app-category-form-modal',
+  templateUrl: './category-form-modal.component.html',
+  styleUrls: ['./category-form-modal.component.scss']
+})
+export class CategoryFormModalComponent implements OnInit {
+  categoryForm: FormGroup;
+  activeTab = 'general';
+  isEdit = false;
+  selectedImage: File | null = null;
+  imagePreview: string | null = null;
+  parentCategories: Category[] = [];
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private categoryService: CategoryService,
+    public dialogRef: MatDialogRef<CategoryFormModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { category?: Category }
+  ) {
+    this.isEdit = !!data?.category;
+    this.categoryForm = this.createForm();
+  }
+
+  ngOnInit(): void {
+    this.loadParentCategories();
+    if (this.isEdit && this.data.category) {
+      this.populateForm(this.data.category);
+    }
+  }
+
+  private loadParentCategories(): void {
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.parentCategories = categories;
+      },
+      error: (error) => {
+        console.error('Error loading parent categories:', error);
+      }
+    });
+  }
+
+  private createForm(): FormGroup {
+    return this.formBuilder.group({
+      parentCategory: [''],
+      categoryName: ['', [Validators.required, Validators.minLength(2)]],
+      description: [''],
+      status: ['active'],
+      sortOrder: [0, [Validators.min(0)]],
+      image: ['']
+    });
+  }
+
+  private populateForm(category: Category): void {
+    this.categoryForm.patchValue({
+      parentCategory: category.parentId || '',
+      categoryName: category.name || '',
+      description: category.description || '',
+      status: category.isActive ? 'active' : 'inactive',
+      sortOrder: category.sortOrder || 0,
+      image: category.imageUrl || ''
+    });
+
+    if (category.imageUrl) {
+      this.imagePreview = this.getCategoryImageUrl(category.imageUrl);
+    }
+  }
+
+  setActiveTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  onImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input && input.files && input.files.length > 0) {
+      this.selectedImage = input.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagePreview = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedImage);
+    } else {
+      this.selectedImage = null;
+      this.imagePreview = null;
+    }
+  }
+
+  // Alias for onImageChange to maintain compatibility with both event handlers
+  onFileSelected(event: Event): void {
+    this.onImageChange(event);
+  }
+
+  removeImage(): void {
+    this.selectedImage = null;
+    this.imagePreview = null;
+    this.categoryForm.patchValue({ image: '' });
+  }
+
+  onSave(): void {
+    if (this.categoryForm.valid) {
+      const formValue = this.categoryForm.value;
+      const categoryData: Partial<Category> = {
+        name: formValue.categoryName,
+        description: formValue.description || '',
+        slug: formValue.categoryName ? formValue.categoryName.toLowerCase().replace(/\s+/g, '-') : '',
+        sortOrder: formValue.sortOrder,
+        isActive: formValue.status === 'active',
+        parentId: formValue.parentCategory ? parseInt(formValue.parentCategory) : undefined
+      };
+      // Instead of handling upload here, return both data and file to parent
+      this.dialogRef.close({ categoryData, imageFile: this.selectedImage });
+    } else {
+      this.markFormGroupTouched();
+    }
+  }
+
+  private createCategory(categoryData: Partial<Category>): void {
+    this.categoryService.createCategory(categoryData).subscribe({
+      next: (response) => {
+        // Upload image if selected
+        if (this.selectedImage && response.id) {
+          this.uploadImage(response.id, response);
+        } else {
+          this.dialogRef.close(response);
+        }
+      },
+      error: (error) => {
+        console.error('Error creating category:', error);
+        // Handle error (show toast, etc.)
+      }
+    });
+  }
+
+  private updateCategory(categoryData: Partial<Category>): void {
+    if (this.data.category?.id) {
+      this.categoryService.updateCategory(this.data.category.id, categoryData).subscribe({
+        next: (response) => {
+          // Upload image if selected
+          if (this.selectedImage) {
+            this.uploadImage(this.data.category!.id, response);
+          } else {
+            this.dialogRef.close(response);
+          }
+        },
+        error: (error) => {
+          console.error('Error updating category:', error);
+          // Handle error (show toast, etc.)
+        }
+      });
+    }
+  }
+
+  private uploadImage(categoryId: number, category: Category): void {
+    if (this.selectedImage) {
+      this.categoryService.uploadCategoryImage(categoryId, this.selectedImage).subscribe({
+        next: () => {
+          this.dialogRef.close(category);
+        },
+        error: (error) => {
+          console.error('Error uploading image:', error);
+          // Still close with the category data even if image upload fails
+          this.dialogRef.close(category);
+        }
+      });
+    }
+  }
+
+  onCancel(): void {
+    this.dialogRef.close();
+  }
+
+  private markFormGroupTouched(): void {
+    Object.keys(this.categoryForm.controls).forEach(key => {
+      const control = this.categoryForm.get(key);
+      if (control) {
+        control.markAsTouched();
+      }
+    });
+  }
+
+  getCategoryImageUrl(imagePath: string): string {
+    if (!imagePath) {
+      return 'assets/default-product.svg';
+    }
+    
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    return `${this.getBackendBaseUrl()}/uploads/categories/${imagePath}`;
+  }
+
+  getBackendBaseUrl(): string {
+    return environment.apiUrl.replace(/\/api$/, '');
+  }
+
+  // Form validation helpers
+  isFieldInvalid(fieldName: string): boolean {
+    const field = this.categoryForm.get(fieldName);
+    return !!(field && field.invalid && (field.dirty || field.touched));
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.categoryForm.get(fieldName);
+    if (field && field.errors) {
+      if (field.errors['required']) {
+        return `${fieldName} is required`;
+      }
+      if (field.errors['minlength']) {
+        return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
+      }
+      if (field.errors['min']) {
+        return `${fieldName} must be at least ${field.errors['min'].min}`;
+      }
+    }
+    return '';
+  }
+
+  get modalTitle(): string {
+    return this.isEdit ? 'Edit Category' : 'Add Category';
+  }
+
+  get breadcrumbLabel(): string {
+    return this.isEdit ? 'Edit' : 'Add';
+  }
+}

@@ -1,0 +1,20 @@
+::ng-deep .mat-select-panel .mat-option.mat-selected {
+  color: #fff !important; // White text for selected option
+  background: #a58d00 !important; // Optional: match badge background, or remove this line
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: transparent !important;
+  border-color: transparent !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: transparent !important;
+  border-color: transparent !important;
+}
+
+// Optional: Remove all outlines (thin and thick)
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: transparent !important;
+  border-color: transparent !important;
+} 

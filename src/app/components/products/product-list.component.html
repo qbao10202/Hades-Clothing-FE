@@ -1,0 +1,104 @@
+<div class="product-catalog-page">
+  <!-- Categories Navigation -->
+  <div class="categories-header">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="categories-nav" style="flex: 1;">
+        <button 
+          class="home-btn"
+          routerLink="/home"
+          style="margin-right: 12px; display: flex; align-items: center; gap: 4px;">
+          <mat-icon>home</mat-icon>
+          Home
+        </button>
+        <button 
+          class="category-btn"
+          [class.active]="!selectedCategory"
+          (click)="shopAll()">
+          All Products
+        </button>
+        <button 
+          *ngFor="let category of categories"
+          class="category-btn"
+          [class.active]="selectedCategory?.id === category.id"
+          [routerLink]="['/products']" 
+          [queryParams]="{category: category.id}">
+          {{ category.name }}
+        </button>
+      </div>
+      <button class="cart-btn" style="position: relative; margin-left: 24px; background: #007bff; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: none;" (click)="goToCart()">
+        <mat-icon>shopping_cart</mat-icon>
+        <span *ngIf="cartItemCount > 0" class="cart-badge" style="position: absolute; top: 4px; right: 4px; background: #ff5252; color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; font-weight: bold;">{{ cartItemCount }}</span>
+      </button>
+    </div>
+    <div class="container">
+      <!-- Filters Section -->
+        <form class="search-bar" (submit)="onSearchChange(); $event.preventDefault();" autocomplete="off">
+          <label for="searchInput" class="visually-hidden">Search products</label>
+          <input id="searchInput" type="text" class="search-input" placeholder="Search by name, description..." [(ngModel)]="searchQuery" name="searchQuery">
+          <button type="submit" class="search-btn" aria-label="Search">
+            <!-- Simple SVG search icon -->
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#007bff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+        </form>
+    </div>
+  </div>
+
+  <!-- Products Section -->
+  <div class="products-section">
+    <div class="container">
+      <div class="section-title" *ngIf="selectedCategory">
+        <p>{{ filteredProducts.length }} products found</p>
+      </div>
+      
+      <div class="products-grid" *ngIf="filteredProducts.length > 0; else noProducts">
+        <div *ngFor="let product of filteredProducts" class="product-card">
+          <div class="product-image">
+            <img [src]="getProductImageUrl(product)" [alt]="product.name" />
+            <div class="product-overlay">
+              <button class="quick-view-btn" (click)="openImageModal(product)">
+                <mat-icon>visibility</mat-icon>
+                Quick View
+              </button>
+            </div>
+          </div>
+          
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <div class="product-price">
+              <span class="current-price">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</span>
+            </div>
+            
+            <div class="product-actions">
+              <button 
+                class="add-to-cart-btn"
+                (click)="addToCart(product)"
+                [disabled]="isOutOfStock(product)"
+                *ngIf="!isOutOfStock(product)">
+                <mat-icon>add_shopping_cart</mat-icon>
+                Add to Cart
+              </button>
+              <button 
+                class="out-of-stock-btn"
+                disabled
+                *ngIf="isOutOfStock(product)">
+                <mat-icon>shopping_cart</mat-icon>
+                Out of Stock
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #noProducts>
+        <div class="no-products">
+          <mat-icon class="no-products-icon">inventory_2</mat-icon>
+          <h3>No products found</h3>
+          <p>Try browsing a different category</p>
+          <button mat-raised-button color="primary" routerLink="/home">
+            Back to Home
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

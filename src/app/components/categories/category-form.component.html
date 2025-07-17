@@ -1,0 +1,50 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="category-form-mat">
+  <h2 mat-dialog-title>{{ data.category ? 'Edit Category' : 'Add Category' }}</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Slug</mat-label>
+      <input matInput formControlName="slug" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" rows="2"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Sort Order</mat-label>
+      <input matInput type="number" formControlName="sortOrder">
+    </mat-form-field>
+    <mat-checkbox formControlName="isActive">Active</mat-checkbox>
+    <div class="image-upload-section">
+      <label>Category Image</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*">
+      <div *ngIf="imagePreview" class="image-preview">
+        <img [src]="imagePreview" alt="Image Preview" style="max-width: 100%; max-height: 120px; margin-top: 8px; border-radius: 4px;" />
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-stroked-button color="primary" type="submit" [disabled]="form.invalid">{{ data.category ? 'Save' : 'Add' }}</button>
+    <button mat-button type="button" (click)="onCancel()">Cancel</button>
+  </mat-dialog-actions>
+</form>
+
+<style>
+.category-form-mat {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+.full-width {
+  width: 100%;
+}
+.image-upload-section {
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+}
+</style> 

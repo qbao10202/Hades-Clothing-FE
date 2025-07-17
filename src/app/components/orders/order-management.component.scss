@@ -1,0 +1,968 @@
+/* Order Management Page - Modern Design */
+.admin-page {
+  padding: 20px;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+
+  // Page Header
+  .page-header {
+    margin-bottom: 24px;
+    
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      color: #666;
+      
+      .breadcrumb-separator {
+        font-size: 18px;
+        margin: 0 4px;
+      }
+      
+      .current {
+        color: #333;
+        font-weight: 500;
+      }
+    }
+    
+    .page-title {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    .page-subtitle {
+      margin: 4px 0 0;
+      color: #666;
+    }
+  }
+
+  // Stats Grid
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+    
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      
+      .stat-content {
+        .stat-number {
+          font-size: 24px;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+        
+        .stat-label {
+          font-size: 14px;
+          color: #666;
+          margin-bottom: 2px;
+        }
+        
+        .stat-period {
+          font-size: 12px;
+          color: #999;
+        }
+      }
+      
+      .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        mat-icon {
+          font-size: 24px;
+          color: white;
+        }
+        
+        &.total {
+          background-color: #4CAF50;
+        }
+        
+        &.new {
+          background-color: #2196F3;
+        }
+        
+        &.completed {
+          background-color: #9C27B0;
+        }
+        
+        &.cancelled {
+          background-color: #F44336;
+        }
+      }
+    }
+  }
+
+  // Action Bar
+  .action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+    
+    .search-section {
+      flex: 1;
+      min-width: 280px;
+      
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: white;
+        border-radius: 4px;
+        padding: 8px 16px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        
+        .search-icon {
+          color: #666;
+          margin-right: 8px;
+        }
+        
+        .search-input {
+          border: none;
+          outline: none;
+          width: 100%;
+          font-size: 14px;
+          
+          &::placeholder {
+            color: #999;
+          }
+        }
+      }
+    }
+    
+    .actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap; // allow wrapping on small screens
+
+      .date-range {
+        display: flex;
+        gap: 8px;
+        min-width: 320px; // ensure both date pickers fit side by side
+
+        .date-field {
+          width: 180px; // increase width for better visibility
+          min-width: 140px;
+        }
+      }
+
+      .status-filter {
+        width: 140px;
+        min-width: 120px;
+      }
+
+      .filter-btn {
+        color: #666;
+      }
+    }
+
+    // Responsive: stack filters vertically on small screens
+    @media (max-width: 600px) {
+      .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+
+        .actions {
+          flex-direction: column;
+          align-items: stretch;
+
+          .date-range {
+            flex-direction: column;
+            min-width: 0;
+            gap: 4px;
+
+            .date-field {
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Data Table
+  .data-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow: hidden;
+    
+    .orders-table {
+      width: 100%;
+      margin-bottom: 1rem;
+      background-color: #ffffff;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      
+      .mat-mdc-header-row {
+        background-color: #f8f9fa;
+        border-radius: 8px 8px 0 0;
+      }
+      
+      .mat-mdc-row {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e9ecef;
+        
+        &:hover {
+          background-color: #f8f9fa;
+          cursor: pointer;
+        }
+
+        &:last-child {
+          border-bottom: none;
+          border-radius: 0 0 8px 8px;
+        }
+      }
+      
+      .mat-mdc-cell, .mat-mdc-header-cell {
+        padding: 16px;
+        font-size: 14px;
+        color: #495057;
+      }
+      
+      .mat-mdc-header-cell {
+        font-weight: 600;
+        color: #212529;
+      }
+      
+      .order-row {
+        border-bottom-width: 0;
+        
+        &.expanded-row {
+          background-color: #f8f9fa;
+        }
+      }
+      
+      .detail-row {
+        height: 0;
+      }
+      
+      tr.detail-row {
+        height: 0;
+      }
+      
+      tr.order-row:not(.expanded-row):hover {
+        background-color: #f8f9fa;
+      }
+      
+      tr.order-row:not(.expanded-row):active {
+        background-color: #e9ecef;
+      }
+      
+      .order-detail {
+        overflow: hidden;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 0 0 8px 8px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      }
+      
+      // Status badges
+      .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: capitalize;
+        display: inline-block;
+        min-width: 100px;
+        text-align: center;
+        
+        &.status-pending {
+          background-color: #fff3cd;
+          color: #856404;
+        }
+        
+        &.status-confirmed {
+          background-color: #cce5ff;
+          color: #004085;
+        }
+        
+        &.status-processing {
+          background-color: #d4edda;
+          color: #155724;
+        }
+        
+        &.status-shipped {
+          background-color: #e2e3ff;
+          color: #383d9b;
+        }
+        
+        &.status-delivered {
+          background-color: #d4edda;
+          color: #155724;
+        }
+        
+        &.status-cancelled {
+          background-color: #f8d7da;
+          color: #721c24;
+        }
+        
+        &.status-refunded {
+          background-color: #e2e3e5;
+          color: #383d41;
+        }
+        
+        &.status-unknown {
+          background-color: #f8f9fa;
+          color: #6c757d;
+        }
+      }
+    }
+    
+    // Items table
+    .items-table {
+      width: 100%;
+      margin: 16px;
+      border-collapse: separate;
+      border-spacing: 0;
+      background-color: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      
+      th, td {
+        padding: 12px 16px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+      }
+      
+      th {
+        background-color: #f8f9fa;
+        color: #666;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      
+      td {
+        color: #333;
+      }
+      
+      tbody tr:last-child td {
+        border-bottom: none;
+      }
+      
+      tbody tr:hover {
+        background-color: #f5f5f5;
+      }
+    }
+    
+    // Custom pagination
+    .mat-paginator {
+      border-top: 1px solid #eee;
+    }
+  }
+
+  // Status Select Styles
+  // Make Change Status dropdown match status badge size, color, and style
+  .status-select {
+    min-width: 100px !important;
+    max-width: 140px !important;
+    height: 40px !important;
+    padding: 0 !important;
+    border-radius: 20px !important;
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #fff !important; // Use white background for visibility
+    color: #222 !important; // Use dark text for visibility
+    box-shadow: none !important;
+    border: 1px solid #e0e0e0 !important;
+    text-align: center !important;
+    .mat-mdc-form-field-flex {
+      padding: 0 !important;
+      min-height: 40px !important;
+      align-items: center !important;
+    }
+    .mat-mdc-select {
+      min-width: 0 !important;
+      padding: 0 !important;
+      height: 40px !important;
+      line-height: 40px !important;
+      font-size: inherit !important;
+      font-weight: inherit !important;
+      background: transparent !important;
+      color: inherit !important;
+      border-radius: 20px !important;
+      box-shadow: none !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .mat-mdc-select-value {
+      color: #222 !important;
+      font-weight: 600 !important;
+      font-size: inherit !important;
+      text-align: center !important;
+      width: 100%;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    .mat-mdc-form-field-outline,
+    .mat-mdc-form-field-outline-thick,
+    .mat-mdc-form-field-outline-start,
+    .mat-mdc-form-field-outline-end,
+    .mat-mdc-form-field-outline-gap {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+      display: none !important;
+    }
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none !important;
+    }
+    &.mat-focused, &:focus-within, &:hover {
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
+    }
+  }
+  // Improve dropdown option contrast
+  ::ng-deep .mat-mdc-select-panel .mat-mdc-option {
+    color: #222 !important;
+    font-weight: 500;
+    background: #fff !important;
+  }
+  // Only affect the Change Status dropdown (status-select-panel)
+  ::ng-deep .status-select-panel .mat-mdc-option.mat-selected {
+    color: #fff !important;
+    background: #388e3c !important;
+  }
+  // Match Change Status dropdown background to status badge
+  .status-select.status-delivered {
+    background: #d4edda !important;
+    color: #155724 !important;
+  }
+  .status-select.status-confirmed {
+    background: #cce5ff !important;
+    color: #004085 !important;
+  }
+  .status-select.status-pending {
+    background: #fff3cd !important;
+    color: #856404 !important;
+  }
+  .status-select.status-processing {
+    background: #d4edda !important;
+    color: #155724 !important;
+  }
+  .status-select.status-shipped {
+    background: #e2e3ff !important;
+    color: #383d9b !important;
+  }
+  .status-select.status-cancelled {
+    background: #f8d7da !important;
+    color: #721c24 !important;
+  }
+  .status-select.status-refunded {
+    background: #e2e3e5 !important;
+    color: #383d41 !important;
+  }
+  .status-select.status-unknown {
+    background: #f8f9fa !important;
+    color: #6c757d !important;
+  }
+  .status-select.status-badge .mat-mdc-select-value {
+    text-transform: capitalize !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100%;
+    text-align: center !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.03em;
+    min-height: 40px;
+    height: 40px;
+  }
+  // Force center and capitalize Change Status selected value
+  ::ng-deep .status-select.status-badge .mat-mdc-select-value,
+  ::ng-deep .status-select.status-badge .mat-mdc-select-value-text {
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    text-transform: capitalize !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    letter-spacing: 0.03em !important;
+    min-height: 40px !important;
+    height: 40px !important;
+  }
+  // Center the dropdown arrow
+  ::ng-deep .status-select.status-badge .mat-mdc-select-arrow {
+    align-self: center !important;
+    margin-top: 0 !important;
+  }
+}
+
+// Responsive design
+@media (max-width: 1024px) {
+  .admin-page {
+    .action-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+      
+      .search-section {
+        max-width: none;
+      }
+      
+      .actions {
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+    }
+    
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-page {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .action-bar .actions {
+      flex-direction: column;
+      align-items: stretch;
+      
+      .date-range {
+        flex-direction: column;
+        
+        .date-field {
+          width: 100%;
+        }
+      }
+      
+      .status-filter {
+        width: 100%;
+      }
+    }
+    
+    .data-table-container {
+      .orders-table {
+        .product-info,
+        .customer-info {
+          .product-image,
+          .customer-avatar {
+            width: 32px;
+            height: 32px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.order-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+
+  .info-group {
+    h4 {
+      margin: 0 0 1rem;
+      color: #212529;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0.5rem 0;
+      color: #495057;
+
+      strong {
+        color: #212529;
+        margin-right: 0.5rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.order-items {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  h4 {
+    margin: 0 0 1rem;
+    color: #212529;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #e9ecef;
+      color: #495057;
+    }
+
+    th {
+      background-color: #f8f9fa;
+      font-weight: 500;
+      color: #212529;
+    }
+
+    .product-thumbnail {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    tfoot {
+      tr:last-child {
+        border-top: 2px solid #dee2e6;
+        font-weight: 600;
+        
+        td {
+          color: #212529;
+        }
+      }
+    }
+  }
+}
+
+.action-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  .search-section {
+    flex: 1;
+    min-width: 200px;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 8px 16px;
+
+      .search-icon {
+        color: #6c757d;
+        margin-right: 8px;
+      }
+
+      .search-input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 1rem;
+        background: transparent;
+        color: #495057;
+
+        &::placeholder {
+          color: #adb5bd;
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    .date-range {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .date-field {
+      width: 150px;
+    }
+
+    .status-filter {
+      width: 150px;
+    }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+
+  .stat-card {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-content {
+      .stat-number {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: #495057;
+        margin-bottom: 0.25rem;
+      }
+
+      .stat-period {
+        font-size: 0.75rem;
+        color: #6c757d;
+      }
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        color: white;
+      }
+
+      &.total {
+        background-color: #007bff;
+      }
+
+      &.new {
+        background-color: #28a745;
+      }
+
+      &.completed {
+        background-color: #6f42c1;
+      }
+
+      &.cancelled {
+        background-color: #dc3545;
+      }
+    }
+  }
+
+  // Global snackbar styles
+  ::ng-deep {
+    .success-snackbar {
+      background-color: #4caf50 !important;
+      color: white !important;
+      
+      .mat-mdc-snack-bar-action {
+        color: white !important;
+      }
+    }
+    
+    .error-snackbar {
+      background-color: #f44336 !important;
+      color: white !important;
+      
+      .mat-mdc-snack-bar-action {
+        color: white !important;
+      }
+    }
+  }
+}
+
+// Improve date picker and status filter visibility in filter bar
+::ng-deep .action-bar .mat-mdc-form-field {
+  font-size: 1.1rem !important;
+  background: #fff !important;
+  border-radius: 8px !important;
+}
+::ng-deep .action-bar .mat-mdc-form-field-infix,
+::ng-deep .action-bar .mat-mdc-input-element,
+::ng-deep .action-bar .mat-mdc-select-value,
+::ng-deep .action-bar .mat-mdc-floating-label,
+::ng-deep .action-bar .mat-mdc-form-field-label {
+  color: #222 !important;
+  background: transparent !important;
+}
+::ng-deep .action-bar .mat-mdc-form-field .mat-mdc-form-field-outline,
+::ng-deep .action-bar .mat-mdc-form-field .mat-mdc-form-field-outline-thick,
+::ng-deep .action-bar .mat-mdc-form-field .mat-mdc-form-field-outline-start,
+::ng-deep .action-bar .mat-mdc-form-field .mat-mdc-form-field-outline-end,
+::ng-deep .action-bar .mat-mdc-form-field .mat-mdc-form-field-outline-gap {
+  border-color: #bdbdbd !important;
+}
+::ng-deep .action-bar .mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-thick {
+  border-color: #495057 !important;
+}
+
+// Improve date picker input field appearance
+::ng-deep .date-field.mat-mdc-form-field {
+  border-radius: 10px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  background: #fff !important;
+  border: 1.5px solid #bdbdbd !important;
+  transition: border-color 0.2s;
+}
+::ng-deep .date-field.mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-thick {
+  border-color: #495057 !important;
+}
+::ng-deep .date-field .mat-mdc-form-field-outline,
+::ng-deep .date-field .mat-mdc-form-field-outline-thick,
+::ng-deep .date-field .mat-mdc-form-field-outline-start,
+::ng-deep .date-field .mat-mdc-form-field-outline-end,
+::ng-deep .date-field .mat-mdc-form-field-outline-gap {
+  border-radius: 10px !important;
+  border-color: #bdbdbd !important;
+}
+::ng-deep .date-field .mat-mdc-form-field-infix,
+::ng-deep .date-field .mat-mdc-input-element,
+::ng-deep .date-field .mat-mdc-floating-label,
+::ng-deep .date-field .mat-mdc-form-field-label {
+  color: #222 !important;
+  font-size: 1.08rem !important;
+  background: transparent !important;
+}
+
+// Make date picker input fields shorter and more compact
+::ng-deep .date-field.mat-mdc-form-field {
+  height: 40px !important;
+  min-height: 40px !important;
+}
+::ng-deep .date-field .mat-mdc-form-field-flex {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+::ng-deep .date-field .mat-mdc-input-element {
+  line-height: 40px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  height: 40px !important;
+}
+::ng-deep .date-field .mat-mdc-form-field-infix {
+  min-height: 40px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+
+:host ::ng-deep .mat-mdc-select-panel .mat-mdc-option.mat-mdc-selected {
+  color: #ffc107 !important;
+  font-weight: 600;
+}
+ 
+::ng-deep .status-select-panel .mat-mdc-option.mat-mdc-selected {
+  color: #ffc107 !important;
+  font-weight: 600;
+}
+ 
+::ng-deep .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: #ffc107 !important;
+}
+ 
+::ng-deep .status-select-panel .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: #ffc107 !important; // Đổi thành màu bạn muốn
+  font-weight: bold;
+}
+.status-select-panel {
+  --mat-option-selected-state-label-text-color: #ffc107 !important;
+}
+ 
+::ng-deep .no-outline .mdc-notched-outline {
+  border: none !important;
+}
+ 
+::ng-deep .no-outline .mdc-notched-outline__leading,
+::ng-deep .no-outline .mdc-notched-outline__notch,
+::ng-deep .no-outline .mdc-notched-outline__trailing {
+  border: none !important;
+}
+ 
+// Style the mat-datepicker popup and calendar to be black with white text
+::ng-deep .mat-datepicker-content,
+::ng-deep .mat-mdc-datepicker-content,
+::ng-deep .mat-calendar,
+::ng-deep .mat-mdc-calendar {
+  background: #111 !important;
+  color: #fff !important;
+}
+::ng-deep .mat-calendar-table,
+::ng-deep .mat-mdc-calendar-table {
+  background: #111 !important;
+  color: #fff !important;
+}
+::ng-deep .mat-calendar-body-cell-content,
+::ng-deep .mat-mdc-calendar-body-cell-content {
+  color: #fff !important;
+}
+::ng-deep .mat-calendar-body-selected,
+::ng-deep .mat-mdc-calendar-body-selected {
+  background: #ffc107 !important;
+  color: #111 !important;
+}
+::ng-deep .mat-calendar-body-today,
+::ng-deep .mat-mdc-calendar-body-today {
+  border-color: #ffc107 !important;
+}
+::ng-deep .mat-calendar-arrow,
+::ng-deep .mat-mdc-calendar-arrow {
+  color: #fff !important;
+}
+ 

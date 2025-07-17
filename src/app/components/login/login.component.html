@@ -1,0 +1,82 @@
+<div class="login-page">
+  <div class="login-container">
+    <div class="login-left">
+        <!-- <div class="illustration"> -->
+          <img src="assets/login_picture.jpg" alt="Login Illustration" />
+        
+
+    </div>
+    
+    <div class="login-right">
+      <div class="login-form-container">
+        <div class="welcome-header">
+          <h2>Welcome to Hades</h2>
+          <p>Wear your power</p>
+        </div>
+        
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label for="username">User name</label>
+            <input
+              type="text"
+              id="username"
+              formControlName="username"
+              placeholder="farhanpaozar"
+              class="form-control"
+              [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+            />
+            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error-message">
+              Username is required
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="password-input">
+              <input
+                [type]="hidePassword ? 'password' : 'text'"
+                id="password"
+                formControlName="password"
+                placeholder="Enter password"
+                class="form-control"
+                [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="hidePassword = !hidePassword"
+              >
+                <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+              Password is required
+            </div>
+          </div>
+          
+          <div class="forgot-password">
+            <a href="javascript:void(0)" (click)="forgotPassword()">Forgot password?</a>
+          </div>
+          
+          <button
+            type="submit"
+            class="login-btn"
+            [disabled]="loginForm.invalid || loading"
+          >
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            <span *ngIf="!loading">Login</span>
+          </button>
+          
+          <div class="signup-link">
+            <span>Don't have an account? </span>
+            <a href="javascript:void(0)" (click)="goToRegister()">Register</a>
+          </div>
+        </form>
+        
+        <div class="footer">
+          <p>© 2025 all rights reserved</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

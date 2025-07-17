@@ -1,0 +1,301 @@
+<div class="admin-page">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <span class="breadcrumb-item">Dashboard</span>
+      <mat-icon class="breadcrumb-separator">chevron_right</mat-icon>
+      <span class="breadcrumb-item current">Orders List</span>
+    </div>
+    <h1 class="page-title">Orders List</h1>
+    <p class="page-subtitle">Here you can find all of your Orders</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-number">{{ stats.totalOrders | number }}</div>
+        <div class="stat-label">Total Orders</div>
+        <div class="stat-period">Total Orders last 365 days</div>
+      </div>
+      <div class="stat-icon total">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+    </div>
+
+    <!-- Total Sales Card -->
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-number">{{ stats.totalSales | currency:'VND':'symbol':'1.0-0' }}</div>
+        <div class="stat-label">Total Sales</div>
+        <div class="stat-period">Total Sales last 365 days</div>
+      </div>
+      <div class="stat-icon sales">
+        <mat-icon>payments</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-number">{{ stats.newOrders | number }}</div>
+        <div class="stat-label">New Orders</div>
+        <div class="stat-period">New Orders last 365 days</div>
+      </div>
+      <div class="stat-icon new">
+        <mat-icon>add_circle</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-number">{{ stats.completedOrders | number }}</div>
+        <div class="stat-label">Completed Orders</div>
+        <div class="stat-period">Completed Order last 365 days</div>
+      </div>
+      <div class="stat-icon completed">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-number">{{ stats.cancelledOrders | number }}</div>
+        <div class="stat-label">Cancelled Orders</div>
+        <div class="stat-period">Cancelled Order last 365 days</div>
+      </div>
+      <div class="stat-icon cancelled">
+        <mat-icon>cancel</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Bar -->
+  <div class="action-bar">
+    <div class="search-section">
+      <div class="search-box">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input 
+          type="text" 
+          placeholder="Search by name, Order ID..." 
+          [formControl]="searchControl"
+          class="search-input"
+        >
+      </div>
+    </div>
+    
+    <div class="actions">
+      <div class="date-range">
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>From</mat-label>
+          <input matInput [matDatepicker]="fromPicker" [(ngModel)]="filters.fromDate" (dateChange)="applyFilters()" readonly>
+          <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+          <mat-datepicker #fromPicker></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>To</mat-label>
+          <input matInput [matDatepicker]="toPicker" [(ngModel)]="filters.toDate" (dateChange)="applyFilters()" readonly>
+          <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+          <mat-datepicker #toPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      
+      <mat-form-field appearance="outline" class="status-filter">
+        <mat-label>All Status</mat-label>
+        <mat-select [(value)]="filters.status" (selectionChange)="applyFilters()">
+          <mat-option value="">All Status</mat-option>
+          <mat-option value="PENDING">Pending</mat-option>
+          <mat-option value="CONFIRMED">Confirmed</mat-option>
+          <mat-option value="PROCESSING">Processing</mat-option>
+          <mat-option value="SHIPPED">Shipped</mat-option>
+          <mat-option value="DELIVERED">Delivered</mat-option>
+          <mat-option value="CANCELLED">Cancelled</mat-option>
+          <mat-option value="REFUNDED">Refunded</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <button mat-icon-button class="filter-btn" [matMenuTriggerFor]="filterMenu">
+        <mat-icon>filter_list</mat-icon>
+      </button>
+      <mat-menu #filterMenu="matMenu">
+        <button mat-menu-item (click)="clearFilters()">
+          <mat-icon>clear</mat-icon>
+          Clear Filters
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="data-table-container">
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange()" multiTemplateDataRows class="orders-table">
+      <!-- Order ID Column -->
+      <ng-container matColumnDef="orderId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="orderNumber">Order ID</th>
+        <td mat-cell *matCellDef="let order">{{ order.orderNumber }}</td>
+      </ng-container>
+
+      <!-- Created Column -->
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="createdAt">Created</th>
+        <td mat-cell *matCellDef="let order">{{ order.createdAt | date:'MMM dd, yyyy' }}</td>
+      </ng-container>
+
+      <!-- Customer Name Column -->
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="customerName">Customer Name</th>
+        <td mat-cell *matCellDef="let order">{{ order.customerName || 'N/A' }}</td>
+      </ng-container>
+
+      <!-- Total Column -->
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="totalAmount">Total</th>
+        <td mat-cell *matCellDef="let order">{{ order.totalAmount | currency:'VND':'symbol':'1.0-0' }}</td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header="status">Status</th>
+        <td mat-cell *matCellDef="let order">
+          <div class="status-badge" [ngClass]="getStatusClass(order.status)">
+            {{ order.status }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Edit Column -->
+      <ng-container matColumnDef="edit">
+        <th mat-header-cell *matHeaderCellDef>Change Status</th>
+        <td mat-cell *matCellDef="let order">
+          <mat-form-field appearance="outline" class="status-select status-badge {{ getStatusClass(order.status) }}">
+            <mat-select 
+              [value]="order.status" 
+              [disabled]="getAllowedStatusOptions(order.status).length <= 1"
+              (selectionChange)="onStatusChange($event, order)"
+              panelClass="status-select-panel"
+            >
+              <mat-option *ngFor="let status of getAllowedStatusOptions(order.status)" [value]="status.value">
+                {{ status.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let order">
+          <button mat-icon-button [matMenuTriggerFor]="menu" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="printOrder(order)">
+              <mat-icon>print</mat-icon>
+              <span>Print</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <!-- Expanded Content Column -->
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let order" [attr.colspan]="displayedColumns.length">
+          <div class="order-detail" [@detailExpand]="order == expandedOrder ? 'expanded' : 'collapsed'">
+            <div class="order-info">
+              <div class="info-group">
+                <h4>Customer Information</h4>
+                <p><strong>Name:</strong> {{ order.customerName || 'N/A' }}</p>
+                <p><strong>Email:</strong> {{ order.customerEmail || 'N/A' }}</p>
+                <p><strong>Phone:</strong> {{ order.customerPhone || 'N/A' }}</p>
+              </div>
+              <div class="info-group">
+                <h4>Shipping Information</h4>
+                <p><strong>Address:</strong> {{ order.shippingAddress || 'N/A' }}</p>
+                <p><strong>Method:</strong> {{ order.shippingMethod || 'N/A' }}</p>
+                <p><strong>Status:</strong> {{ order.shippingStatus }}</p>
+                <p><strong>Tracking:</strong> {{ order.trackingNumber || 'N/A' }}</p>
+              </div>
+              <div class="info-group">
+                <h4>Payment Information</h4>
+                <p><strong>Status:</strong> {{ order.paymentStatus }}</p>
+                <p><strong>Currency:</strong> {{ order.currency }}</p>
+              </div>
+            </div>
+            <div class="order-items">
+              <h4>Order Items</h4>
+              <table class="items-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>SKU</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of order.orderItems; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>
+                      <img [src]="item.product?.images[0]?.imageUrl || 'assets/default-product.png'" 
+                           alt="Product image" 
+                           class="product-thumbnail">
+                    </td>
+                    <td>{{ item.productSku || item.product?.sku || 'N/A' }}</td>
+                    <td>{{ item.productName }}</td>
+                    <td>{{ item.unitPrice | currency:'VND':'symbol':'1.0-0' }}</td>
+                    <td>× {{ item.quantity }}</td>
+                    <td>{{ item.totalPrice | currency:'VND':'symbol':'1.0-0' }}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6" class="text-right"><strong>Subtotal:</strong></td>
+                    <td>{{ order.subtotal | currency:'VND':'symbol':'1.0-0' }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" class="text-right"><strong>Shipping:</strong></td>
+                    <td>{{ order.shippingAmount | currency:'VND':'symbol':'1.0-0' }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" class="text-right"><strong>Tax:</strong></td>
+                    <td>{{ order.taxAmount | currency:'VND':'symbol':'1.0-0' }}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="6" class="text-right"><strong>Discount:</strong></td>
+                    <td>{{ order.discountAmount | currency:'VND':'symbol':'1.0-0' }}</td>
+                  </tr>
+                  <tr class="total-row">
+                    <td colspan="6" class="text-right"><strong>Total:</strong></td>
+                    <td>{{ order.totalAmount | currency:'VND':'symbol':'1.0-0' }}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let order; columns: displayedColumns;"
+          class="order-row"
+          [class.expanded-row]="expandedOrder === order"
+          (click)="expandedOrder = expandedOrder === order ? null : order">
+      </tr>
+      <tr mat-row *matRowDef="let order; columns: ['expandedDetail']"
+          class="detail-row"
+          [@detailExpand]="order == expandedOrder ? 'expanded' : 'collapsed'">
+      </tr>
+    </table>
+
+    <mat-paginator 
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

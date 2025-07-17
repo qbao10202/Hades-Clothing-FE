@@ -1,0 +1,139 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <div class="sidebar" [class.sidebar-closed]="!sidebarOpen">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon">H</div>
+        <span class="logo-text">HADES ADMIN</span>
+      </div>
+      <button class="sidebar-toggle" (click)="toggleSidebar()">
+        <mat-icon>{{ sidebarOpen ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <div *ngFor="let item of getFilteredNavItems()" class="nav-item">
+        <a [routerLink]="item.route" 
+           routerLinkActive="active" 
+           class="nav-link"
+           [title]="item.label">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span class="nav-label" *ngIf="sidebarOpen">{{ item.label }}</span>
+        </a>
+      </div>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div class="user-info" *ngIf="user">
+        <div class="user-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="user-details" *ngIf="sidebarOpen">
+          <div class="user-name">{{ user.firstName }} {{ user.lastName }}</div>
+          <div class="user-role">{{ user && user.roles && user.roles.length > 0 ? user.roles[0].name : 'User' }}</div>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()" *ngIf="sidebarOpen">
+        <mat-icon>logout</mat-icon>
+        <span>Đăng xuất</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" [class.main-content-expanded]="!sidebarOpen">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <button class="menu-btn" (click)="toggleSidebar()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <h1 class="page-title">Dashboard</h1>
+      </div>
+      
+      <div class="top-bar-right">
+        <button class="back-home-btn" routerLink="/home">
+          <mat-icon>home</mat-icon>
+          <span>Về trang chủ</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+      <ng-container *ngIf="dashboardStats; else loading">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>attach_money</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ dashboardStats.totalSales | currency:'VND':'symbol':'1.0-0' }}</div>
+              <div class="stat-label">Tổng doanh thu</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>shopping_cart</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ dashboardStats.totalOrders }}</div>
+              <div class="stat-label">Đơn hàng</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>inventory</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ dashboardStats.totalProducts }}</div>
+              <div class="stat-label">Sản phẩm</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <mat-icon>people</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-value">{{ dashboardStats.totalCustomers }}</div>
+              <div class="stat-label">Khách hàng</div>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h3>Đơn hàng gần đây</h3>
+              <button class="view-all-btn" routerLink="/admin/orders">Xem tất cả</button>
+            </div>
+            <div class="card-content">
+              <ul *ngIf="dashboardStats.recentOrders && dashboardStats.recentOrders.length; else noOrders">
+                <li *ngFor="let order of dashboardStats.recentOrders">
+                  <span>Mã: {{ order.orderNumber }}</span> - <span>Khách: {{ order.customer?.companyName || order.customer?.contactPerson || order.customer?.email }}</span> - <span>Tổng: {{ order.totalAmount | currency:'VND':'symbol':'1.0-0' }}</span> - <span>Ngày: {{ order.orderDate | date:'short' }}</span>
+                </li>
+              </ul>
+              <ng-template #noOrders><p>Không có đơn hàng gần đây.</p></ng-template>
+            </div>
+          </div>
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h3>Sản phẩm bán chạy</h3>
+              <button class="view-all-btn" routerLink="/admin/products">Xem tất cả</button>
+            </div>
+            <div class="card-content">
+              <ul *ngIf="dashboardStats.topSellingProducts && dashboardStats.topSellingProducts.length; else noProducts">
+                <li *ngFor="let tsp of dashboardStats.topSellingProducts">
+                  <span>{{ tsp.product.name }}</span> - <span>Đã bán: {{ tsp.soldQuantity }}</span>
+                </li>
+              </ul>
+              <ng-template #noProducts><p>Không có sản phẩm bán chạy.</p></ng-template>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loading>
+        <div class="loading">Đang tải dữ liệu...</div>
+      </ng-template>
+    </div>
+  </div>
+</div> 

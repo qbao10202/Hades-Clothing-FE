@@ -1,0 +1,275 @@
+<div class="product-form-modal">
+  <div class="modal-header">
+    <h2 class="modal-title">{{ data.product ? 'Edit Product' : 'Add Product' }}</h2>
+    <button class="close-button" mat-icon-button (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form [formGroup]="productForm" (ngSubmit)="onSave()">
+      <div class="form-grid">
+        <!-- Product Code -->
+        <div class="form-group">
+          <label for="productCode">Product Code</label>
+          <input 
+            id="productCode"
+            type="text" 
+            formControlName="productCode"
+            class="form-control"
+            placeholder="Enter product code"
+          />
+        </div>
+
+        <!-- Product Name -->
+        <div class="form-group">
+          <label for="name">Product Name *</label>
+          <input 
+            id="name"
+            type="text" 
+            formControlName="name"
+            class="form-control"
+            placeholder="Enter product name"
+          />
+        </div>
+
+        <!-- Slug -->
+        <div class="form-group">
+          <label for="slug">Slug *</label>
+          <input 
+            id="slug"
+            type="text" 
+            formControlName="slug"
+            class="form-control"
+            placeholder="product-slug"
+          />
+        </div>
+
+        <!-- Description -->
+        <div class="form-group full-width">
+          <label for="description">Description</label>
+          <textarea 
+            id="description"
+            formControlName="description"
+            class="form-control"
+            rows="4"
+            placeholder="Premium polo shirt with unique splice design"
+          ></textarea>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+          <label for="price">Price *</label>
+          <input 
+            id="price"
+            type="number" 
+            formControlName="price"
+            class="form-control"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <!-- Cost -->
+        <div class="form-group">
+          <label for="cost">Cost *</label>
+          <input 
+            id="cost"
+            type="number" 
+            formControlName="cost"
+            class="form-control"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <!-- Sale Price -->
+        <div class="form-group">
+          <label for="salePrice">Sale Price</label>
+          <input 
+            id="salePrice"
+            type="number" 
+            formControlName="salePrice"
+            class="form-control"
+            placeholder="0.00"
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label for="categoryId">Category *</label>
+          <select 
+            id="categoryId"
+            formControlName="categoryId"
+            class="form-control"
+          >
+            <option value="">Select category</option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{ category.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Stock Quantity -->
+        <div class="form-group">
+          <label for="stockQuantity">Stock Quantity *</label>
+          <input 
+            id="stockQuantity"
+            type="number" 
+            formControlName="stockQuantity"
+            class="form-control"
+            placeholder="0"
+            min="0"
+          />
+        </div>
+
+        <!-- Min Stock Level -->
+        <div class="form-group">
+          <label for="minStockLevel">Min Stock Level</label>
+          <input 
+            id="minStockLevel"
+            type="number" 
+            formControlName="minStockLevel"
+            class="form-control"
+            placeholder="0"
+            min="0"
+          />
+        </div>
+
+        <!-- Max Stock Level -->
+        <div class="form-group">
+          <label for="maxStockLevel">Max Stock Level</label>
+          <input 
+            id="maxStockLevel"
+            type="number" 
+            formControlName="maxStockLevel"
+            class="form-control"
+            placeholder="0"
+            min="0"
+          />
+        </div>
+
+        <!-- Brand -->
+        <div class="form-group">
+          <label for="brand">Brand</label>
+          <input 
+            id="brand"
+            type="text" 
+            formControlName="brand"
+            class="form-control"
+            placeholder="Enter brand"
+          />
+        </div>
+
+        <!-- Color -->
+        <div class="form-group">
+          <label for="color">Color</label>
+          <input 
+            id="color"
+            type="text" 
+            formControlName="color"
+            class="form-control"
+            placeholder="Enter color"
+          />
+        </div>
+
+        <!-- Size -->
+        <div class="form-group">
+          <label for="size">Size</label>
+          <input 
+            id="size"
+            type="text" 
+            formControlName="size"
+            class="form-control"
+            placeholder="Enter size"
+          />
+        </div>
+
+        <!-- Material -->
+        <div class="form-group">
+          <label for="material">Material</label>
+          <input 
+            id="material"
+            type="text" 
+            formControlName="material"
+            class="form-control"
+            placeholder="Enter material"
+          />
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group">
+          <label for="tags">Tags</label>
+          <input 
+            id="tags"
+            type="text" 
+            formControlName="tags"
+            class="form-control"
+            placeholder="Enter tags (comma separated)"
+          />
+        </div>
+
+        <!-- Tax Rate -->
+        <div class="form-group">
+          <label for="taxRate">Tax Rate (%)</label>
+          <input 
+            id="taxRate"
+            type="number" 
+            formControlName="taxRate"
+            class="form-control"
+            placeholder="0"
+            min="0"
+            max="100"
+            step="0.01"
+          />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group full-width">
+          <label>Product Image</label>
+          <div class="image-upload-container">
+            <input 
+              type="file" 
+              (change)="onFileSelected($event)" 
+              accept="image/*"
+              class="file-input"
+              id="imageInput"
+            />
+            <label for="imageInput" class="file-label">
+              <mat-icon>cloud_upload</mat-icon>
+              Choose Image
+            </label>
+            <div *ngIf="imagePreview" class="image-preview">
+              <img [src]="imagePreview" alt="Product Preview" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkboxes -->
+        <div class="form-group full-width">
+          <div class="checkbox-grid">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="isActive" />
+              <span class="checkmark"></span>
+              Active
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="productForm.invalid">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,169 @@
+<div class="user-admin-container">
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <h1 class="page-title">Quản lý người dùng</h1>
+    </div>
+    
+    <div class="top-bar-right">
+      <button class="back-home-btn" (click)="backToHome()">
+        <mat-icon>home</mat-icon>
+        <span>Về trang chủ</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Search and Filter Bar -->
+  <div class="filter-bar">
+    <div class="search-section">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Tìm kiếm</mat-label>
+        <input matInput [(ngModel)]="searchText" (input)="applyFilters()" placeholder="Tìm theo tên, email...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="filter-section">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Lọc theo vai trò</mat-label>
+        <mat-select [(ngModel)]="filterRole" (selectionChange)="applyFilters()">
+          <mat-option value="">Tất cả vai trò</mat-option>
+          <mat-option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Trạng thái</mat-label>
+        <mat-select [(ngModel)]="filterStatus" (selectionChange)="applyFilters()">
+          <mat-option value="">Tất cả</mat-option>
+          <mat-option value="active">Đang hoạt động</mat-option>
+          <mat-option value="inactive">Không hoạt động</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-button (click)="clearFilters()" class="clear-btn">
+        <mat-icon>clear</mat-icon>
+        Xóa bộ lọc
+      </button>
+    </div>
+
+    <div class="action-section">
+      <button mat-raised-button color="primary" (click)="addUser()" class="add-btn">
+        <mat-icon>add</mat-icon>
+        Thêm người dùng
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Đang tải dữ liệu...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Users Table -->
+  <div *ngIf="!loading && !errorMessage" class="table-container">
+    <table mat-table [dataSource]="dataSource" class="users-table mat-elevation-z8">
+      
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+      </ng-container>
+
+      <!-- Username Column -->
+      <ng-container matColumnDef="username">
+        <th mat-header-cell *matHeaderCellDef>Tên đăng nhập</th>
+        <td mat-cell *matCellDef="let user">
+          <div class="user-info">
+            <div class="user-avatar">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+            <div class="user-details">
+              <div class="username">{{ user.username }}</div>
+              <div class="email">{{ user.email }}</div>
+            </div>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+
+      <!-- Full Name Column -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Họ và tên</th>
+        <td mat-cell *matCellDef="let user">{{ user.firstName }} {{ user.lastName }}</td>
+      </ng-container>
+
+      <!-- Roles Column -->
+      <ng-container matColumnDef="roles">
+        <th mat-header-cell *matHeaderCellDef>Vai trò</th>
+        <td mat-cell *matCellDef="let user">
+          <div class="roles-container">
+            <span *ngFor="let role of user.roles" class="role-badge" [class]="'role-' + role.name.toLowerCase()">
+              {{ role.name }}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+        <td mat-cell *matCellDef="let user">
+          <span class="status-badge" [class]="getStatusBadgeClass(user)">
+            {{ getStatusText(user) }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Hành động</th>
+        <td mat-cell *matCellDef="let user">
+          <div class="actions-container">
+            <button mat-icon-button color="primary" (click)="editUser(user)" matTooltip="Chỉnh sửa">
+              <mat-icon>edit</mat-icon>
+            </button>
+            
+            <button mat-icon-button 
+                    [color]="user.isActive ? 'warn' : 'primary'" 
+                    (click)="toggleUserStatus(user)"
+                    [matTooltip]="user.isActive ? 'Vô hiệu hóa' : 'Kích hoạt'">
+              <mat-icon>{{ user.isActive ? 'block' : 'check_circle' }}</mat-icon>
+            </button>
+            
+            <button mat-icon-button color="warn" (click)="deleteUser(user)" matTooltip="Xóa">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Pagination -->
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" 
+                   showFirstLastButtons 
+                   aria-label="Select page of users">
+    </mat-paginator>
+
+    <!-- No Data Message -->
+    <div *ngIf="dataSource.data.length === 0" class="no-data">
+      <mat-icon>people_outline</mat-icon>
+      <p>Không tìm thấy người dùng nào</p>
+    </div>
+  </div>
+</div> 

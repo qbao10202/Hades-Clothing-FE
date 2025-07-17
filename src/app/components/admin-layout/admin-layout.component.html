@@ -1,0 +1,63 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="!sidebarOpen">
+    <!-- Logo -->
+    <div class="sidebar-header">
+      <div class="logo">
+        <span class="logo-text" *ngIf="sidebarOpen">HADES</span>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+      
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="/home" routerLinkActive="active" class="nav-link">
+            <mat-icon>dashboard</mat-icon>
+            <span *ngIf="sidebarOpen">HomePage</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a routerLink="/admin/products" routerLinkActive="active" class="nav-link">
+            <mat-icon>inventory</mat-icon>
+            <span *ngIf="sidebarOpen">Products</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a routerLink="/admin/categories" routerLinkActive="active" class="nav-link">
+            <mat-icon>category</mat-icon>
+            <span *ngIf="sidebarOpen">Category</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a routerLink="/admin/orders" routerLinkActive="active" class="nav-link">
+            <mat-icon>receipt_long</mat-icon>
+            <span *ngIf="sidebarOpen">Orders</span>
+          </a>
+        </li>
+        
+        <li class="nav-item">
+          <a routerLink="/admin/users" routerLinkActive="active" class="nav-link">
+            <mat-icon>people</mat-icon>
+            <span *ngIf="sidebarOpen">Customer</span>
+          </a>
+        </li>
+        
+      </ul>
+
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content" [class.sidebar-collapsed]="!sidebarOpen">
+
+    <!-- Router Outlet -->
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
