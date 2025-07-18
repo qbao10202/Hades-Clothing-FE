@@ -629,11 +629,8 @@ export class ProductCatalogComponent implements OnInit, OnDestroy {
 
   getProductImageUrl(product: ProductDTO): string {
     if (product.images && product.images.length > 0) {
-      const imageUrl = product.images[0].imageUrl;
-      if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        return this.getBackendBaseUrl() + imageUrl;
-      }
-      return imageUrl;
+      const filename = product.images[0].imageUrl;
+      return `${this.getBackendBaseUrl()}/api/products/${product.id}/images/${filename}`;
     }
     return 'assets/placeholder.jpg';
   }

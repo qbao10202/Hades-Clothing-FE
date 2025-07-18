@@ -133,16 +133,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   getCategoryImageUrl(category: Category): string {
-    if (category.imageUrl) {
-      if (category.imageUrl.startsWith('/uploads')) {
-        return `${this.getBackendBaseUrl()}${category.imageUrl}`;
-      }
-      if (category.imageUrl.startsWith('http')) {
-        return category.imageUrl;
-      }
-      return `${this.getBackendBaseUrl()}/uploads/categories/${category.id}/${category.imageUrl}`;
+    if (!category || !category.id) {
+      return 'assets/default-product.svg';
     }
-    return 'assets/default-product.svg';
+    return `${this.getBackendBaseUrl()}/api/categories/${category.id}/image`;
   }
 
   onImageError(event: any): void {

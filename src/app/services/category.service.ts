@@ -53,4 +53,22 @@ export class CategoryService {
     formData.append('file', file);
     return this.http.post(`${this.apiUrl}/${categoryId}/image`, formData);
   }
+
+  createCategoryWithImage(category: Partial<Category>, file?: File): Observable<Category> {
+    const formData = new FormData();
+    formData.append('category', JSON.stringify(category));
+    if (file) {
+      formData.append('file', file);
+    }
+    return this.http.post<Category>(`${this.apiUrl}/multipart`, formData);
+  }
+
+  updateCategoryWithImage(id: number, category: Partial<Category>, file?: File): Observable<Category> {
+    const formData = new FormData();
+    formData.append('category', JSON.stringify(category));
+    if (file) {
+      formData.append('file', file);
+    }
+    return this.http.put<Category>(`${this.apiUrl}/${id}/multipart`, formData);
+  }
 } 

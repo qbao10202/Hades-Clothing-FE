@@ -14,7 +14,7 @@ import { environment } from '../../../environments/environment';
             <img [src]="getProductImageUrl(product)" [alt]="product.name" style="max-width: 100%; max-height: 400px; border-radius: 8px;" />
           </div>
           <div class="thumbnail-images flex gap-2" *ngIf="product.images.length > 1">
-            <img *ngFor="let image of product.images" [src]="getImageUrl(image.imageUrl)" [alt]="product.name" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 2px solid #eee;" (click)="mainImage = image.imageUrl" />
+            <img *ngFor="let image of product.images" [src]="getImageUrl(image.imageUrl, product.id)" [alt]="product.name" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 2px solid #eee;" (click)="mainImage = image.imageUrl" />
           </div>
         </div>
         <div class="flex-1">
@@ -62,19 +62,16 @@ export class ProductDetailComponent implements OnInit {
 
   getProductImageUrl(product: ProductDTO): string {
     if (this.mainImage) {
-      return this.getImageUrl(this.mainImage);
+      return this.getImageUrl(this.mainImage, product.id);
     }
     if (product.images && product.images.length > 0) {
-      return this.getImageUrl(product.images[0].imageUrl);
+      return this.getImageUrl(product.images[0].imageUrl, product.id);
     }
     return 'assets/placeholder.jpg';
   }
 
-  getImageUrl(url: string): string {
-    if (url && url.startsWith('/uploads/')) {
-      return this.getBackendBaseUrl() + url;
-    }
-    return url;
+  getImageUrl(url: string, productId: number): string {
+    return `${this.getBackendBaseUrl()}/api/products/${productId}/images/${url}`;
   }
 
   getBackendBaseUrl(): string {

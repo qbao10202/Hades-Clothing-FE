@@ -257,21 +257,8 @@ export class ProductAdminComponent implements OnInit {
   // Image URL helper
   getProductImageUrl(product: ProductDTO): string {
     if (product.images && product.images.length > 0) {
-      const primaryImage = product.images.find((img: any) => img.isPrimary) || product.images[0];
-      const imageUrl = primaryImage.imageUrl;
-      
-      // If imageUrl is already a full URL, return it
-      if (imageUrl.startsWith('http')) {
-        return imageUrl;
-      }
-      
-      // If imageUrl starts with /uploads, prefix with backend host
-      if (imageUrl.startsWith('/uploads')) {
-        return `${this.getBackendBaseUrl()}${imageUrl}`;
-      }
-      
-      // Otherwise, construct the full URL
-      return `${this.getBackendBaseUrl()}/api/uploads/products/${product.id}/${imageUrl}`;
+      const filename = product.images[0].imageUrl;
+      return `${this.getBackendBaseUrl()}/api/products/${product.id}/images/${filename}`;
     }
     return 'assets/default-product.svg';
   }

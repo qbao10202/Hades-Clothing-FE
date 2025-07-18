@@ -52,10 +52,7 @@
           <th mat-header-cell *matHeaderCellDef>Image</th>
           <td mat-cell *matCellDef="let category">
             <div class="category-image">
-              <img *ngIf="category.imageUrl" [src]="getImageUrl(category.imageUrl)" [alt]="category.name">
-              <div *ngIf="!category.imageUrl" class="placeholder-image">
-                <mat-icon>image</mat-icon>
-              </div>
+              <img [src]="getImageUrl(category)" [alt]="category.name" (error)="onImageError($event)">
             </div>
           </td>
         </ng-container>

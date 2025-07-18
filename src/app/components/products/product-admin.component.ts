@@ -325,41 +325,11 @@ export class ProductAdminComponent implements OnInit, AfterViewInit {
 
   // Image URL helper
   getProductImageUrl(product: ProductDTO): string {
-    // First check if there's a direct imageUrl property
-    if (product.imageUrl) {
-      // If it's already a full URL, return it
-      if (product.imageUrl.startsWith('http')) {
-        return product.imageUrl;
-      }
-      // If it starts with /uploads, prefix with backend host
-      if (product.imageUrl.startsWith('/uploads')) {
-        return `${this.getBackendBaseUrl()}${product.imageUrl}`;
-      }
-      // Otherwise, construct the full URL
-      return `${this.getBackendBaseUrl()}/api/uploads/products/${product.id}/${product.imageUrl}`;
-    }
-    
-    // If no direct imageUrl, check images array
     if (product.images && product.images.length > 0) {
-      const primaryImage = product.images.find((img: any) => img.isPrimary) || product.images[0];
-      const imageUrl = primaryImage.imageUrl;
-      
-      // If imageUrl is already a full URL, return it
-      if (imageUrl.startsWith('http')) {
-        return imageUrl;
-      }
-      
-      // If imageUrl starts with /uploads, prefix with backend host
-      if (imageUrl.startsWith('/uploads')) {
-        return `${this.getBackendBaseUrl()}${imageUrl}`;
-      }
-      
-      // Otherwise, construct the full URL
-      return `${this.getBackendBaseUrl()}/api/uploads/products/${product.id}/${imageUrl}`;
+      const filename = product.images[0].imageUrl;
+      return `${this.getBackendBaseUrl()}/api/products/${product.id}/images/${filename}`;
     }
-    
-    // Return default image if no image found
-    return '/assets/default-product.svg';
+    return 'assets/default-product.svg';
   }
 
   onImageError(event: any): void {

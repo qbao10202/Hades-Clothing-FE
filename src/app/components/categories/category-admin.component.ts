@@ -323,11 +323,13 @@ export class CategoryAdminComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getImageUrl(imageUrl: string): string {
-    if (!imageUrl) return '';
-    if (imageUrl.startsWith('http')) return imageUrl;
-    if (imageUrl.startsWith('/uploads')) return `${this.getBackendBaseUrl()}${imageUrl}`;
-    return `${this.getBackendBaseUrl()}/uploads/categories/${imageUrl}`;
+  getImageUrl(category: Category): string {
+    if (!category || !category.id) return 'assets/default-product.svg';
+    return `${this.getBackendBaseUrl()}/api/categories/${category.id}/image`;
+  }
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = 'assets/default-product.svg';
   }
 
   getBackendBaseUrl(): string {
