@@ -104,9 +104,9 @@ import { environment } from '../../../environments/environment';
               <div class="product-info">
                 <h3 class="product-name">{{ product.name }}</h3>
                 <div class="product-price">
-                  <span class="current-price">{{ (product.salePrice || product.price) | currency:'VND':'symbol':'1.0-0' }}</span>
+                  <span class="current-price">{{ (product.salePrice || product.price) | number }} đ</span>
                   <span class="original-price" *ngIf="product.salePrice && product.salePrice < product.price">
-                    {{ product.price | currency:'VND':'symbol':'1.0-0' }}
+                    {{ product.price | number }} đ
                   </span>
                 </div>
                 

@@ -20,6 +20,9 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./category-admin.component.scss']
 })
 export class CategoryAdminComponent implements OnInit, AfterViewInit {
+  static loadCategories() {
+    throw new Error('Method not implemented.');
+  }
   categories: Category[] = [];
   dataSource = new MatTableDataSource<Category>();
   selection = new SelectionModel<Category>(true, []);
@@ -122,57 +125,6 @@ export class CategoryAdminComponent implements OnInit, AfterViewInit {
       data: { 
         category: null, 
         parentCategories: this.categories 
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(async result => {
-      if (result) {
-        let { categoryData, imageFile } = result;
-        if (imageFile) {
-          // We need to create the category first to get the ID
-          this.categoryService.createCategory(categoryData).subscribe({
-            next: async (newCategory) => {
-              try {
-                await this.categoryService.uploadCategoryImage(newCategory.id, imageFile).toPromise();
-                // Fetch updated category to get imageUrl
-                const updatedCategory = await this.categoryService.getCategory(newCategory.id).toPromise();
-                if (updatedCategory && updatedCategory.imageUrl) {
-                  categoryData.imageUrl = updatedCategory.imageUrl;
-                }
-                // Update the category with the imageUrl
-                this.categoryService.updateCategory(newCategory.id, categoryData).subscribe({
-                  next: () => {
-                    this.loadCategories();
-                    this.snackBar.open('Category added successfully!', 'Close', { duration: 3000 });
-                  },
-                  error: (error) => {
-                    console.error('Error updating category with image:', error);
-                    this.snackBar.open('Error updating category with image', 'Close', { duration: 3000 });
-                  }
-                });
-              } catch (error) {
-                console.error('Error uploading image:', error);
-                this.loadCategories();
-                this.snackBar.open('Category added (image not changed)', 'Close', { duration: 3000 });
-              }
-            },
-            error: (error) => {
-              console.error('Error creating category:', error);
-              this.snackBar.open('Error creating category', 'Close', { duration: 3000 });
-            }
-          });
-        } else {
-          this.categoryService.createCategory(categoryData).subscribe({
-            next: () => {
-              this.loadCategories();
-              this.snackBar.open('Category added successfully!', 'Close', { duration: 3000 });
-            },
-            error: (error) => {
-              console.error('Error creating category:', error);
-              this.snackBar.open('Error creating category', 'Close', { duration: 3000 });
-            }
-          });
-        }
       }
     });
   }

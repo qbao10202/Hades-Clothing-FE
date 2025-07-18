@@ -4,6 +4,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../models';
 import { environment } from '../../../environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CategoryAdminComponent } from './category-admin.component';
 
 @Component({
   selector: 'app-category-form-modal',
@@ -22,6 +24,7 @@ export class CategoryFormModalComponent implements OnInit {
     private formBuilder: FormBuilder,
     private categoryService: CategoryService,
     public dialogRef: MatDialogRef<CategoryFormModalComponent>,
+    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: { category?: Category }
   ) {
     this.isEdit = !!data?.category;
@@ -103,6 +106,7 @@ export class CategoryFormModalComponent implements OnInit {
   }
 
   onSave(): void {
+    console.log('onSave called');
     if (this.categoryForm.valid) {
       const formValue = this.categoryForm.value;
       const categoryData: Partial<Category> = {
@@ -122,13 +126,19 @@ export class CategoryFormModalComponent implements OnInit {
       this.markFormGroupTouched();
     }
   }
-
-  private createCategory(categoryData: Partial<Category>): void {
+private createCategory(categoryData: Partial<Category>): void {
     this.categoryService.createCategoryWithImage(categoryData, this.selectedImage || undefined).subscribe({
       next: (response) => {
+          this.snackBar.open('Category added successfully!', 'Close', {
+        duration: 3000
+      });
         this.dialogRef.close(response);
+        window.location.reload();
       },
       error: (error) => {
+             this.snackBar.open('Failed to create category', 'Close', {
+        duration: 3000
+      });
         console.error('Error creating category:', error);
       }
     });

@@ -123,7 +123,7 @@
             <div class="card-content">
               <ul *ngIf="dashboardStats.topSellingProducts && dashboardStats.topSellingProducts.length; else noProducts">
                 <li *ngFor="let tsp of dashboardStats.topSellingProducts">
-                  <span>{{ tsp.product.name }}</span> - <span>Đã bán: {{ tsp.soldQuantity }}</span>
+                  <span>{{ tsp.product.name }}</span> - <span>Selled: {{ tsp.soldQuantity }}</span>
                 </li>
               </ul>
               <ng-template #noProducts><p>Không có sản phẩm bán chạy.</p></ng-template>

@@ -41,8 +41,8 @@ export class ProductAdminComponent implements OnInit {
     this.productService.getCategories().subscribe({
       next: (cats: Category[]) => this.categories = cats,
       error: (err: any) => {
-        this.errorMessage = 'Không thể tải danh mục sản phẩm.';
-        this.snackBar.open(this.errorMessage, 'Đóng', { duration: 4000 });
+        this.errorMessage = 'Can not loading categories.';
+        this.snackBar.open(this.errorMessage, 'Close', { duration: 4000 });
       }
     });
   }
@@ -62,8 +62,8 @@ export class ProductAdminComponent implements OnInit {
         this.errorMessage = '';
       },
       error: (err: any) => {
-        this.errorMessage = 'Không thể tải sản phẩm.';
-        this.snackBar.open(this.errorMessage, 'Đóng', { duration: 4000 });
+        this.errorMessage = 'Can not loading products.';
+        this.snackBar.open(this.errorMessage, 'Close', { duration: 4000 });
       }
     });
   }
@@ -99,15 +99,15 @@ export class ProductAdminComponent implements OnInit {
             if (imageFile) {
               this.productService.uploadProductImage(created.id!, imageFile).subscribe(() => {
                 this.dataSource.data = [created, ...this.dataSource.data];
-                this.snackBar.open('Thêm sản phẩm thành công', 'Đóng', { duration: 3000 });
+                this.snackBar.open('Product added successfully', 'Close', { duration: 3000 });
               });
             } else {
               this.dataSource.data = [created, ...this.dataSource.data];
-              this.snackBar.open('Thêm sản phẩm thành công', 'Đóng', { duration: 3000 });
+              this.snackBar.open('Product added successfully', 'Close', { duration: 3000 });
             }
           },
           error: (err: any) => {
-            this.snackBar.open('Lỗi khi thêm sản phẩm', 'Đóng', { duration: 3000 });
+            this.snackBar.open('Error adding product', 'Close', { duration: 3000 });
           }
         });
       }
@@ -132,17 +132,17 @@ export class ProductAdminComponent implements OnInit {
                 this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
                   p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
                 );
-                this.snackBar.open('Cập nhật sản phẩm thành công', 'Đóng', { duration: 3000 });
+                this.snackBar.open('Update product successfully', 'Close', { duration: 3000 });
               });
             } else {
               this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
                 p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
               );
-              this.snackBar.open('Cập nhật sản phẩm thành công', 'Đóng', { duration: 3000 });
+              this.snackBar.open('Update product successfully', 'Close', { duration: 3000 });
             }
           },
           error: (err: any) => {
-            this.snackBar.open('Lỗi khi cập nhật sản phẩm', 'Đóng', { duration: 3000 });
+            this.snackBar.open('Error updating product', 'Close', { duration: 3000 });
           }
         });
       }
@@ -164,10 +164,10 @@ export class ProductAdminComponent implements OnInit {
         this.productService.deleteProduct(product.id!).subscribe({
           next: () => {
             this.dataSource.data = this.dataSource.data.filter((p: ProductDTO) => p.id !== product.id);
-            this.snackBar.open('Đã xóa sản phẩm', 'Đóng', { duration: 3000 });
+            this.snackBar.open('Deleted product!', 'Close', { duration: 3000 });
           },
           error: (err: any) => {
-            this.snackBar.open('Lỗi khi xóa sản phẩm', 'Đóng', { duration: 4000 });
+            this.snackBar.open('Error deleting product', 'Close', { duration: 4000 });
           }
         });
       }
@@ -180,7 +180,7 @@ export class ProductAdminComponent implements OnInit {
       width: '400px',
       data: {
         title: 'Delete  product?',
-        message: 'Điều này sẽ xóa vĩnh viễn các sản phẩm đã chọn khỏi kho của bạn.',
+        message: 'Delete the selected products?',
         itemName: selectedProducts.map((p: ProductDTO) => p.name).join(', ')
       }
     });
@@ -197,9 +197,9 @@ export class ProductAdminComponent implements OnInit {
             !selectedProducts.some((selected: ProductDTO) => selected.id === p.id)
           );
           this.selection.clear();
-          this.snackBar.open(`Đã xóa thành công ${selectedProducts.length} sản phẩm`, 'Đóng', { duration: 3000 });
+          this.snackBar.open(`Deleted ${selectedProducts.length} products successfully`, 'Close', { duration: 3000 });
         }).catch((error: any) => {
-          this.snackBar.open('Lỗi khi xóa một số sản phẩm', 'Đóng', { duration: 4000 });
+          this.snackBar.open('Error deleting some products', 'Close', { duration: 4000 });
         });
       }
     });
@@ -221,15 +221,15 @@ export class ProductAdminComponent implements OnInit {
             if (imageFile) {
               this.productService.uploadProductImage(created.id!, imageFile).subscribe(() => {
                 this.loadProducts();
-                this.snackBar.open('Thêm sản phẩm thành công', 'Đóng', { duration: 3000 });
+                this.snackBar.open('Add product successfully', 'Close', { duration: 3000 });
               });
             } else {
               this.loadProducts();
-              this.snackBar.open('Thêm sản phẩm thành công', 'Đóng', { duration: 3000 });
+              this.snackBar.open('Add product successfully', 'Close', { duration: 3000 });
             }
           },
           error: (err: any) => {
-            this.snackBar.open('Lỗi khi thêm sản phẩm', 'Đóng', { duration: 3000 });
+            this.snackBar.open('Error adding product', 'Close', { duration: 3000 });
           }
         });
       }
