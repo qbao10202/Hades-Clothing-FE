@@ -1026,6 +1026,107 @@
   padding: 0 20px;
 }
 
+.contact-info {
+  background-color: #1f1f1f;
+  color: #f1f1f1;
+  padding: 3rem 1rem;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+  }
+
+  .contact-card {
+    .contact-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      color: #ffffff;
+      border-left: 4px solid #ffcc00;
+      padding-left: 0.5rem;
+    }
+
+    .contact-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin: 0.5rem 0;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #ccc;
+
+        a {
+          color: #ccc;
+          text-decoration: none;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: #ffcc00;
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    .social-links {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+
+      .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #333;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        transition: background-color 0.3s ease;
+
+        mat-icon {
+          color: #fff;
+          font-size: 24px;
+        }
+
+        &:hover {
+          background-color: #ffcc00;
+
+          mat-icon {
+            color: #1f1f1f;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Optional responsive tweaks
+@media (max-width: 600px) {
+  .contact-info {
+    padding: 2rem 1rem;
+
+    .contact-card {
+      .contact-title {
+        font-size: 1.1rem;
+      }
+
+      .contact-list li {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+
 // Responsive Design
 @media (max-width: 768px) {
   .welcome-view {

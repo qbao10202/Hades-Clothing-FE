@@ -133,7 +133,6 @@ private createCategory(categoryData: Partial<Category>): void {
         duration: 3000
       });
         this.dialogRef.close(response);
-        window.location.reload();
       },
       error: (error) => {
              this.snackBar.open('Failed to create category', 'Close', {

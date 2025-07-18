@@ -172,6 +172,7 @@ export interface CartItem {
   price: number;
   createdAt: Date;
   updatedAt: Date;
+  size?: string;
 }
 
 export interface Cart {

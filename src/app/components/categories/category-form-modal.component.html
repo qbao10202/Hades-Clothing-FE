@@ -25,14 +25,7 @@
         >
           General
         </button>
-        <button 
-          type="button" 
-          class="tab-button" 
-          [class.active]="activeTab === 'others'"
-          (click)="setActiveTab('others')"
-        >
-          Others
-        </button>
+
       </div>
 
       <!-- General Tab Content -->
@@ -125,21 +118,6 @@
           </div>
         </div>
 
-        <!-- Website -->
-        <div class="form-group">
-          <label for="website">Website</label>
-          <div class="input-group">
-            <span class="input-prefix">http://</span>
-            <input 
-              id="website"
-              type="text" 
-              formControlName="website"
-              class="form-control"
-              placeholder="www.musamind.com"
-            />
-          </div>
-        </div>
-
         <!-- Image Upload -->
         <div class="form-group">
           <label>Image</label>
@@ -168,43 +146,6 @@
           </div>
         </div>
 
-        <!-- Info Link -->
-        <div class="form-group">
-          <label for="infoLink">Info Link</label>
-          <input 
-            id="infoLink"
-            type="text" 
-            formControlName="infoLink"
-            class="form-control"
-            placeholder="Use it for icon chart or other info related to this option that will open in popup."
-          />
-        </div>
-
-        <!-- Status -->
-        <div class="form-group">
-          <label for="status">Status</label>
-          <select 
-            id="status"
-            formControlName="status"
-            class="form-control"
-          >
-            <option [value]="true">Visible</option>
-            <option [value]="false">Hidden</option>
-          </select>
-          <mat-icon class="info-icon" title="Status information">info</mat-icon>
-        </div>
-
-        <!-- Sort Order -->
-        <div class="form-group">
-          <label for="sortOrder">Sort Order</label>
-          <input 
-            id="sortOrder"
-            type="number" 
-            formControlName="sortOrder"
-            class="form-control"
-            placeholder="Enter sort order"
-          />
-        </div>
 
         <!-- Image Upload -->
         <!-- <div class="form-group">

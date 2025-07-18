@@ -5,6 +5,12 @@ import { environment } from '../../environments/environment';
 import { Order } from '../models';
 import { map } from 'rxjs/operators';
 
+function toUtcISOString(date: Date | string): string {
+  let d = date;
+  if (typeof d === 'string') d = new Date(d);
+  return d.toISOString(); // Always UTC
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -66,6 +72,14 @@ export class OrderService {
       defaultParams.sortBy = 'customer.contactPerson';
     }
 
+    // Format startDate and endDate for Spring compatibility
+    if (defaultParams.startDate) {
+      defaultParams.startDate = toUtcISOString(defaultParams.startDate);
+    }
+    if (defaultParams.endDate) {
+      defaultParams.endDate = toUtcISOString(defaultParams.endDate);
+    }
+
     // Filter out undefined values
     const filteredParams = Object.entries(defaultParams)
       .filter(([_, value]) => value !== undefined && value !== null && value !== '')
@@ -93,10 +107,14 @@ export class OrderService {
     );
   }
 
-  getOrderStatistics(startDate: Date | null | undefined, endDate: Date | null | undefined): Observable<any> {
+  getOrderStatistics(startDate: Date | string | null | undefined, endDate: Date | string | null | undefined): Observable<any> {
     const params = new URLSearchParams();
-    if (startDate) params.append('startDate', startDate.toISOString().split('T')[0]);
-    if (endDate) params.append('endDate', endDate.toISOString().split('T')[0]);
+    if (startDate) {
+      params.append('startDate', toUtcISOString(startDate));
+    }
+    if (endDate) {
+      params.append('endDate', toUtcISOString(endDate));
+    }
     
     return this.http.get<any>(`${this.apiUrl}/statistics?${params.toString()}`);
   }

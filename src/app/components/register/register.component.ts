@@ -56,7 +56,8 @@ export class RegisterComponent implements OnInit {
         },
         error: (error) => {
           this.loading = false;
-          this.snackBar.open('Registration failed. Please try again.', 'Close', {
+          const errorMsg = error?.error?.message || 'Registration failed. Please try again.';
+          this.snackBar.open(errorMsg, 'Close', {
             duration: 3000,
             panelClass: ['error-snackbar']
           });

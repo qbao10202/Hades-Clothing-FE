@@ -1,35 +1,7 @@
 <footer class="footer bg-gray-900 text-white">
-  <div class="container mx-auto px-4 py-12">
-    <!-- Main Footer Content -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-      
-      <!-- Store Locations -->
-      <div class="footer-section">
-        <h3 class="footer-title">HADES STORE LOCATIONS</h3>
-        <div class="store-locations">
-          <div class="store-location">
-            <p class="store-name">HADES STUDIO Store 1:</p>
-            <p class="store-address">26 LY TU TRONG STREET, DISTRICT 1, HOCHIMINH (THE NEW PLAYGROUND).</p>
-          </div>
-          <div class="store-location">
-            <p class="store-name">Store 2:</p>
-            <p class="store-address">140 NGUYEN HY QUANG, DONG DA DISTRICT, HANOI.</p>
-          </div>
-          <div class="store-location">
-            <p class="store-name">Store 3:</p>
-            <p class="store-address">Floor B1 VINCOM LY TU TRONG, DISTRICT 1, HOCHIMINH.</p>
-          </div>
-          <div class="store-location">
-            <p class="store-name">Store 4:</p>
-            <p class="store-address">4th Floor, GIGA MALL, HCM</p>
-          </div>
-          <div class="store-location">
-            <p class="store-name">Store 5:</p>
-            <p class="store-address">152 TRAN QUANG DIEU, WARD 14, DISTRICT 3, HCM</p>
-          </div>
-        </div>
-      </div>
-
+  <div class="container mx-auto px-4 py-14">
+    <div class="footer-main grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-10">
+   
       <!-- Policies -->
       <div class="footer-section">
         <h3 class="footer-title">POLICIES</h3>
@@ -43,73 +15,42 @@
           <li><a href="/policy/privacy" class="footer-link">Privacy Policy</a></li>
         </ul>
       </div>
-
       <!-- Contact Information -->
       <div class="footer-section">
-        <h3 class="footer-title">CONTACT INFORMATION</h3>
-        <div class="contact-info">
-          <p class="company-name">HADES CO., LTD</p>
-          <p class="contact-item">
-            <span class="contact-label">Customer Service:</span>
-            <a href="tel:02873011021" class="contact-value">02873011021</a>
-            <span class="contact-hours">(10am - 6pm)</span>
-          </p>
-          <p class="contact-item">
-            <span class="contact-label">Established:</span>
-            <span class="contact-value">20/07/2020</span>
-          </p>
-          <p class="contact-item">
-            <span class="contact-label">Recruitment:</span>
-            <a href="mailto:hr&#64;hades.vn" class="contact-value">hr&#64;hades.vn</a>
-          </p>
-          <p class="contact-item">
-            <span class="contact-label">Website:</span>
-            <a href="https://hades.vn" class="contact-value">hades.vn</a>
-          </p>
-          <p class="contact-item">
-            <span class="contact-label">For business:</span>
-            <a href="mailto:contact&#64;hades.vn" class="contact-value">contact&#64;hades.vn</a>
-          </p>
-        </div>
+        <h3 class="footer-title">CONTACT</h3>
+        <ul class="contact-list">
+          <li><mat-icon>business</mat-icon> HADES CO., LTD</li>
+          <li><mat-icon>call</mat-icon> <a href="tel:02873011021">02873011021</a> <span class="contact-hours">(10am - 6pm)</span></li>
+          <li><mat-icon>event</mat-icon> Established: 20/07/2020</li>
+          <li><mat-icon>email</mat-icon> <a href="mailto:hr&#64;hades.vn">hr&#64;hades.vn</a> (Recruitment)</li>
+          <li><mat-icon>public</mat-icon> <a href="https://hades.vn">hades.vn</a></li>
+          <li><mat-icon>mail</mat-icon> <a href="mailto:contact&#64;hades.vn">contact&#64;hades.vn</a> (Business)</li>
+        </ul>
       </div>
-
       <!-- Social Media & Newsletter -->
       <div class="footer-section">
-        <h3 class="footer-title">FOLLOW US ON SOCIAL MEDIA</h3>
+        <h3 class="footer-title">FOLLOW US</h3>
         <div class="social-links">
-          <a href="https://facebook.com/hades.vn" class="social-link" target="_blank" rel="noopener">
-            <mat-icon>facebook</mat-icon>
-            <span>Facebook</span>
+          <a href="https://facebook.com/hades.vn" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+            <mat-icon svgIcon="facebook"></mat-icon>
           </a>
-          <a href="https://instagram.com/hades.vn" class="social-link" target="_blank" rel="noopener">
-            <mat-icon>camera_alt</mat-icon>
-            <span>Instagram</span>
+          <a href="https://instagram.com/hades.vn" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+            <mat-icon svgIcon="instagram"></mat-icon>
           </a>
-          <a href="https://youtube.com/hades.vn" class="social-link" target="_blank" rel="noopener">
-            <mat-icon>play_circle</mat-icon>
-            <span>YouTube</span>
+          <a href="https://youtube.com/hades.vn" class="social-link" target="_blank" rel="noopener" aria-label="YouTube">
+            <mat-icon svgIcon="youtube"></mat-icon>
           </a>
-          <a href="https://tiktok.com/@hades.vn" class="social-link" target="_blank" rel="noopener">
-            <mat-icon>music_note</mat-icon>
-            <span>TikTok</span>
+          <a href="https://tiktok.com/@hades.vn" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
+            <mat-icon svgIcon="tiktok"></mat-icon>
           </a>
         </div>
-
-        <!-- Newsletter Signup -->
         <div class="newsletter-section">
           <h4 class="newsletter-title">Newsletter</h4>
-          <p class="newsletter-description">Subscribe to get updates on new arrivals and exclusive offers</p>
+          <p class="newsletter-description">Get updates on new arrivals and exclusive offers</p>
           <form class="newsletter-form" (ngSubmit)="subscribeNewsletter()">
             <div class="newsletter-input-group">
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                class="newsletter-input"
-                [(ngModel)]="newsletterEmail"
-                name="email"
-                required
-              >
-              <button type="submit" class="newsletter-btn">
+              <input type="email" placeholder="Enter your email" class="newsletter-input" [(ngModel)]="newsletterEmail" name="email" required>
+              <button type="submit" class="newsletter-btn" aria-label="Subscribe">
                 <mat-icon>send</mat-icon>
               </button>
             </div>
@@ -117,34 +58,16 @@
         </div>
       </div>
     </div>
-
     <!-- Bottom Footer -->
     <div class="footer-bottom">
       <div class="footer-bottom-content">
-        <!-- Language & Currency Selector -->
-        <div class="footer-selectors">
-          <div class="language-selector">
-            <span class="selector-label">Language:</span>
-            <button class="selector-btn" [class.active]="currentLang === 'en'" (click)="setLanguage('en')">EN</button>
-            <button class="selector-btn" [class.active]="currentLang === 'vi'" (click)="setLanguage('vi')">VI</button>
-          </div>
-          <div class="currency-selector">
-            <span class="selector-label">Currency:</span>
-            <button class="selector-btn active">VND</button>
-          </div>
-        </div>
-
-        <!-- Back to Top -->
         <button class="back-to-top" (click)="scrollToTop()">
           <mat-icon>keyboard_arrow_up</mat-icon>
-          <span>back to top</span>
+          <span>Back to top</span>
         </button>
       </div>
-
-      <!-- Copyright -->
       <div class="copyright">
-        <p>&copy; 2024 HADES STUDIO. All rights reserved.</p>
-        <p class="business-registration">Da thong bao bo Cong Thuong</p>
+        <p>&copy; 2025 HADES STUDIO. All rights reserved.</p>
       </div>
     </div>
   </div>

@@ -64,14 +64,14 @@ export class OrderManagementComponent implements OnInit, AfterViewInit {
 
   // Add available status options
   statusOptions = [
-    { value: 'CART' as OrderStatus, label: 'Cart' },
-    { value: 'PENDING' as OrderStatus, label: 'Pending' },
-    { value: 'CONFIRMED' as OrderStatus, label: 'Confirmed' },
-    { value: 'PROCESSING' as OrderStatus, label: 'Processing' },
-    { value: 'SHIPPED' as OrderStatus, label: 'Shipped' },
-    { value: 'DELIVERED' as OrderStatus, label: 'Delivered' },
-    { value: 'CANCELLED' as OrderStatus, label: 'Cancelled' },
-    { value: 'REFUNDED' as OrderStatus, label: 'Refunded' }
+    { value: 'CART' as OrderStatus, label: 'CART' },
+    { value: 'PENDING' as OrderStatus, label: 'PENDING' },
+    { value: 'CONFIRMED' as OrderStatus, label: 'CONFIRMED' },
+    { value: 'PROCESSING' as OrderStatus, label: 'PROCESSING' },
+    { value: 'SHIPPED' as OrderStatus, label: 'SHIPPED' },
+    { value: 'DELIVERED' as OrderStatus, label: 'DELIVERED' },
+    { value: 'CANCELLED' as OrderStatus, label: 'CANCELLED' },
+    { value: 'REFUNDED' as OrderStatus, label: 'REFUNDED' }
   ];
 
   // Get allowed status transitions based on current status
@@ -203,12 +203,14 @@ export class OrderManagementComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private formatDate(date: Date): string {
+  private formatDate(date: Date | string): string {
     if (!date) return '';
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    // If date is a string (from input type='date'), convert to Date
+    if (typeof date === 'string') {
+      // 'YYYY-MM-DD' from input type='date' → Date
+      return new Date(date).toISOString();
+    }
+    return date.toISOString();
   }
 
   loadStats(): void {
@@ -372,5 +374,11 @@ export class OrderManagementComponent implements OnInit, AfterViewInit {
       cancelledOrders: 0,
       totalSales: 0
     };
+  }
+
+  onDateChange() {
+    this.currentPage = 0;
+    this.loadOrders();
+    this.loadStats();
   }
 }

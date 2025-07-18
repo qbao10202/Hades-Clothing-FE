@@ -127,6 +127,12 @@ export class CategoryAdminComponent implements OnInit, AfterViewInit {
         parentCategories: this.categories 
       }
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadCategories();
+        this.snackBar.open('Category added successfully!', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   editCategory(category: Category): void {
@@ -141,35 +147,8 @@ export class CategoryAdminComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(async result => {
       if (result) {
-        let { categoryData, imageFile } = result;
-        // Preserve imageUrl if not changed
-        if (!imageFile && category.imageUrl) {
-          categoryData.imageUrl = category.imageUrl;
-        }
-        if (imageFile) {
-          // First upload the image, get the new imageUrl
-          try {
-            const uploadResp: any = await this.categoryService.uploadCategoryImage(category.id, imageFile).toPromise();
-            // The backend does not return the new imageUrl, so fetch the updated category
-            const updatedCategory = await this.categoryService.getCategory(category.id).toPromise();
-            if (updatedCategory && updatedCategory.imageUrl) {
-              categoryData.imageUrl = updatedCategory.imageUrl;
-            }
-          } catch (error) {
-            console.error('Error uploading image:', error);
-            this.snackBar.open('Error uploading image', 'Close', { duration: 3000 });
-          }
-        }
-        this.categoryService.updateCategory(category.id, categoryData).subscribe({
-          next: () => {
-            this.loadCategories();
-            this.snackBar.open('Category updated successfully!', 'Close', { duration: 3000 });
-          },
-          error: (error) => {
-            console.error('Error updating category:', error);
-            this.snackBar.open('Error updating category', 'Close', { duration: 3000 });
-          }
-        });
+        this.loadCategories();
+        this.snackBar.open('Category updated successfully!', 'Close', { duration: 3000 });
       }
     });
   }

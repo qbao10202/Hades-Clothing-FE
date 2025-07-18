@@ -31,6 +31,7 @@ import { environment } from '../../../environments/environment';
                 
                 <div class="item-details">
                   <h3 class="item-name">{{ item.product?.name }}</h3>
+                  <div *ngIf="item.size" class="item-size">Size: {{ item.size }}</div>
                   <p class="item-category">{{ item.product?.category?.name }}</p>
                   <div class="item-price">{{ formatCurrency(item.price) }}</div>
                 </div>
@@ -71,12 +72,23 @@ import { environment } from '../../../environments/environment';
                     <span>Do you have a discount code?</span>
                     <mat-icon>{{ showDiscountCode ? 'expand_less' : 'expand_more' }}</mat-icon>
                   </div>
-                  <div class="discount-input" *ngIf="showDiscountCode">
-                    <mat-form-field appearance="outline">
-                      <input matInput [(ngModel)]="discountCode" placeholder="Enter discount code">
-                      <button mat-button matSuffix (click)="applyDiscount()">Apply</button>
-                    </mat-form-field>
+              
+
+                  <div class="discount-input" *ngIf="showDiscountCode" style="display: flex; gap: 10px; align-items: center;">
+                    <input 
+                      type="text"
+                      [(ngModel)]="discountCode"
+                      placeholder="Enter discount code"
+                      style="padding: 10px; border: 2px solid #2c3e50; border-radius: 4px; background: white; color: black; width: 100%; outline: none;" 
+                    />
+                    <button 
+                      (click)="applyDiscount()"
+                      style="padding: 10px 20px; background: #2c3e50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                    >
+                      Apply
+                    </button>
                   </div>
+     
                 </div>
                 <div class="summary-line total">
                   <span>TOTAL PRICE:</span>
@@ -190,6 +202,12 @@ import { environment } from '../../../environments/environment';
       color: #2c3e50;
       margin: 0;
       text-transform: uppercase;
+    }
+
+    .item-size {
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-top: 4px;
     }
 
     .item-category {
@@ -338,13 +356,38 @@ import { environment } from '../../../environments/environment';
     }
 
     .discount-input {
-      padding: 15px;
-      background: white;
-    }
+      mat-form-field {
+        width: 100%;
 
-    .discount-input mat-form-field {
-      width: 100%;
+        .mat-form-field-outline {
+          color: black;
+          border-color: black !important;
+        }
+
+        .mat-form-field-outline-thick {
+          color: black;
+          border-color: black !important;
+        }
+
+        .mat-form-field-flex {
+          background: white !important;
+          color: black !important;
+        }
+
+        input.mat-input-element {
+          background: white !important;
+          color: black !important;
+
+          &::placeholder {
+            color: black !important;
+            opacity: 1 !important;
+          }
+        }
+      }
     }
+    
+    
+    
 
     .checkout-btn {
       width: 100%;
@@ -453,6 +496,8 @@ import { environment } from '../../../environments/environment';
     }
     .floating-home-btn mat-icon {
       font-size: 28px;
+      margin-left: -4px;
+      margin-top: -4px;
     }
 
     @media (max-width: 1024px) {

@@ -1,15 +1,13 @@
 <div class="product-catalog-page">
+
   <!-- Categories Navigation -->
   <div class="categories-header">
     <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
-      <div class="categories-nav" style="flex: 1;">
-        <button 
-          class="home-btn"
-          routerLink="/home"
-          style="margin-right: 12px; display: flex; align-items: center; gap: 4px;">
-          <mat-icon>home</mat-icon>
-          Home
-        </button>
+      <button class="floating-home-btn"  routerLink="/home" mat-fab color="primary"  style="position: fixed; top: 10px; left: 10px; z-index: 1000;">
+        <mat-icon>home</mat-icon>
+      </button>
+      <div class="categories-nav" style="flex: 1; margin-left: 30px;">
+    
         <button 
           class="category-btn"
           [class.active]="!selectedCategory"
@@ -25,7 +23,7 @@
           {{ category.name }}
         </button>
       </div>
-      <button class="cart-btn" style="position: relative; margin-left: 24px; background: #007bff; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: none;" (click)="goToCart()">
+      <button class="cart-btn" style="position: relative; margin-left: 24px; margin-top: -30px; background: #007bff; color: white; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border: none;" (click)="goToCart()">
         <mat-icon>shopping_cart</mat-icon>
         <span *ngIf="cartItemCount > 0" class="cart-badge" style="position: absolute; top: 4px; right: 4px; background: #ff5252; color: white; border-radius: 50%; padding: 2px 7px; font-size: 12px; font-weight: bold;">{{ cartItemCount }}</span>
       </button>

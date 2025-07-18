@@ -46,11 +46,14 @@ export class CartService {
   // Add item to cart
   addToCart(product: Product, quantity: number = 1): Observable<Cart> {
     if (this.isLoggedIn()) {
-      const payload = {
+      const payload: any = {
         productId: product.id,
         quantity: quantity,
         price: product.salePrice || product.price
       };
+      if (product.size || (product as any).selectedSize) {
+        payload.size = (product as any).selectedSize || product.size;
+      }
       return this.http.post<Cart>(`${this.apiUrl}/items`, payload).pipe(
         tap(cart => {
           this.cartSubject.next(cart);
@@ -65,7 +68,7 @@ export class CartService {
     } else {
       // Guest cart logic
       let cart = this.getCartFromLocalStorage();
-      const existing = cart.items.find(item => item.productId === product.id);
+      const existing = cart.items.find(item => item.productId === product.id && item.size === ((product as any).selectedSize || product.size));
       if (existing) {
         existing.quantity += quantity;
       } else {
@@ -77,7 +80,8 @@ export class CartService {
           quantity: quantity,
           price: product.salePrice || product.price,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
+          size: (product as any).selectedSize || product.size
         });
       }
       cart = this.calculateTotals(cart.items);
@@ -89,14 +93,16 @@ export class CartService {
   }
 
   // Update cart item quantity
-  updateCartItem(itemId: number, quantity: number): Observable<Cart> {
+  updateCartItem(itemId: number, quantity: number, size?: string): Observable<Cart> {
     if (this.isLoggedIn()) {
       const item = this.getCart().items.find(i => i.id === itemId);
       const price = item ? item.price : undefined;
-      console.log('Calling updateCartItem with:', { itemId, quantity, price, productId: item?.productId });
-      return this.http.put<any>(`${this.apiUrl}/items/${itemId}`, { quantity, price, productId: item?.productId }).pipe(
+      const payload: any = { quantity, price, productId: item?.productId };
+      if (size || item?.size) {
+        payload.size = size || item?.size;
+      }
+      return this.http.put<any>(`${this.apiUrl}/items/${itemId}`, payload).pipe(
         map(response => {
-          console.log('CartResponseDTO from backend:', response);
           const cart: Cart = {
             items: response?.items || [],
             totalItems: response?.totalItems || 0,
@@ -111,7 +117,6 @@ export class CartService {
           return cart;
         }),
         catchError(error => {
-          console.log('Error or unexpected response in updateCartItem:', error);
           this.showErrorMessage('Failed to update cart');
           throw error;
         })

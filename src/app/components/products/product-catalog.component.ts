@@ -104,9 +104,9 @@ import { environment } from '../../../environments/environment';
               <div class="product-info">
                 <h3 class="product-name">{{ product.name }}</h3>
                 <div class="product-price">
-                  <span class="current-price">{{ (product.salePrice || product.price) | number }} đ</span>
+                  <span class="current-price">{{ (product.salePrice || product.price) | currency:'VND':'symbol':'1.0-0' }}</span>
                   <span class="original-price" *ngIf="product.salePrice && product.salePrice < product.price">
-                    {{ product.price | number }} đ
+                    {{ product.price | currency:'VND':'symbol':'1.0-0' }}
                   </span>
                 </div>
                 
@@ -629,11 +629,7 @@ export class ProductCatalogComponent implements OnInit, OnDestroy {
 
   getProductImageUrl(product: ProductDTO): string {
     if (product.images && product.images.length > 0) {
-      let filename = product.images[0].imageUrl;
-      // Remove any leading /uploads/ from filename
-      if (filename.startsWith('/uploads/')) {
-        filename = filename.substring('/uploads/'.length);
-      }
+      const filename = product.images[0].imageUrl;
       return `${this.getBackendBaseUrl()}/api/products/${product.id}/images/${filename}`;
     }
     return 'assets/placeholder.jpg';

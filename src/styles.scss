@@ -601,6 +601,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ::ng-deep .status-select-panel .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-minimal {
   background: #fff !important;
   border-color: #fff !important;
+  display: none !important;
 }
 
 // GLOBAL OVERRIDES for Angular Material dropdown overlays
@@ -614,8 +615,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ::ng-deep .mat-pseudo-checkbox-checked.mat-pseudo-checkbox-minimal {
   background: #fff !important;
   border-color: #fff !important;
+  display: none !important;
 }
 
+::ng-deep .mat-pseudo-checkbox {
+  display: none !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+:host ::ng-deep .mat-pseudo-checkbox {
+  display: inline-block !important;
+  width: 18px !important;
+  height: 18px !important;
+}
 .remove-cart-item-dialog-panel {
   border-radius: 18px !important;
   box-shadow: 0 8px 32px rgba(31,41,55,0.18) !important;

@@ -18,3 +18,24 @@
   color: transparent !important;
   border-color: transparent !important;
 } 
+
+// Remove checkmark (tick) icon in mat-select dropdown (all Angular Material versions)
+::ng-deep .mat-select-panel .mat-option .mat-pseudo-checkbox {
+  display: none !important;
+}
+::ng-deep .mat-select-panel .mat-option .mat-icon {
+  display: none !important;
+}
+::ng-deep .mat-select-panel .mat-option.mat-selected:not(.mat-option-multiple) {
+  background: none !important;
+}
+// Remove purple outline (focus border) from mat-select
+::ng-deep .mat-select.mat-focused .mat-select-trigger {
+  box-shadow: none !important;
+  border-color: transparent !important;
+  outline: none !important;
+}
+::ng-deep .mat-select-trigger {
+  border-color: transparent !important;
+  box-shadow: none !important;
+} 
