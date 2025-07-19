@@ -213,7 +213,7 @@ export class ProductAdminComponent implements OnInit, AfterViewInit {
               this.productService.uploadProductImage(updatedProduct.id!, imageFile).subscribe({
                 next: () => {
                   // Refresh again after image upload to show the new image (silently)
-                  this.loadProducts();
+                this.loadProducts();
                 },
                 error: (err: any) => {
                   console.error('Error uploading image:', err);
@@ -309,7 +309,7 @@ export class ProductAdminComponent implements OnInit, AfterViewInit {
               this.productService.uploadProductImage(created.id!, imageFile).subscribe({
                 next: () => {
                   // Refresh again after image upload to show the new image (silently)
-                  this.loadProducts();
+                this.loadProducts();
                 },
                 error: (err: any) => {
                   console.error('Error uploading image:', err);

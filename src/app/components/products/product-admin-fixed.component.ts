@@ -138,9 +138,9 @@ export class ProductAdminComponent implements OnInit {
           next: (updatedProduct: ProductDTO) => {
             // Show notification and update data source immediately after product update
             this.snackBar.open('Update product successfully', 'Close', { duration: 3000 });
-            this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
-              p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
-            );
+                this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
+                  p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
+                );
             
             // Handle image upload silently in the background (if any)
             if (imageFile) {
@@ -243,7 +243,7 @@ export class ProductAdminComponent implements OnInit {
               this.productService.uploadProductImage(created.id!, imageFile).subscribe({
                 next: () => {
                   // Refresh again after image upload to show the new image (silently)
-                  this.loadProducts();
+                this.loadProducts();
                 },
                 error: (err: any) => {
                   console.error('Error uploading image:', err);
