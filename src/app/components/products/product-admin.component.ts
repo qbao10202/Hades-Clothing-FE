@@ -364,14 +364,7 @@ export class ProductAdminComponent implements OnInit, AfterViewInit {
   }
 
   onImageError(event: any): void {
-    console.warn('Image failed to load:', event.target.src);
-    event.target.src = 'assets/default-product.svg';
-    // Add a small delay and retry once
-    setTimeout(() => {
-      if (event.target.src !== 'assets/default-product.svg') {
-        event.target.src = event.target.src + '?retry=' + Date.now();
-      }
-    }, 1000);
+    event.target.src = '/assets/default-product.svg';
   }
 
   getBackendBaseUrl(): string {
