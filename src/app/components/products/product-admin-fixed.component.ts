@@ -96,14 +96,23 @@ export class ProductAdminComponent implements OnInit {
         const { product, imageFile } = result;
         this.productService.createProduct(product).subscribe({
           next: (created: ProductDTO) => {
+            // Show notification and update data source immediately after product creation
+            this.snackBar.open('Product added successfully', 'Close', { duration: 3000 });
+            this.dataSource.data = [created, ...this.dataSource.data];
+            
+            // Handle image upload silently in the background (if any)
             if (imageFile) {
-              this.productService.uploadProductImage(created.id!, imageFile).subscribe(() => {
-                this.dataSource.data = [created, ...this.dataSource.data];
-                this.snackBar.open('Product added successfully', 'Close', { duration: 3000 });
+              this.productService.uploadProductImage(created.id!, imageFile).subscribe({
+                next: () => {
+                  // Refresh to show the new image (silently)
+                  this.loadProducts();
+                },
+                error: (err: any) => {
+                  console.error('Error uploading image:', err);
+                  // Only show error notification if image upload fails
+                  this.snackBar.open('Product created but image upload failed', 'Close', { duration: 3000 });
+                }
               });
-            } else {
-              this.dataSource.data = [created, ...this.dataSource.data];
-              this.snackBar.open('Product added successfully', 'Close', { duration: 3000 });
             }
           },
           error: (err: any) => {
@@ -127,18 +136,25 @@ export class ProductAdminComponent implements OnInit {
         const { product: updated, imageFile } = result;
         this.productService.updateProduct(product.id!, updated).subscribe({
           next: (updatedProduct: ProductDTO) => {
+            // Show notification and update data source immediately after product update
+            this.snackBar.open('Update product successfully', 'Close', { duration: 3000 });
+            this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
+              p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
+            );
+            
+            // Handle image upload silently in the background (if any)
             if (imageFile) {
-              this.productService.uploadProductImage(updatedProduct.id!, imageFile).subscribe(() => {
-                this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
-                  p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
-                );
-                this.snackBar.open('Update product successfully', 'Close', { duration: 3000 });
+              this.productService.uploadProductImage(updatedProduct.id!, imageFile).subscribe({
+                next: () => {
+                  // Refresh to show the new image (silently)
+                  this.loadProducts();
+                },
+                error: (err: any) => {
+                  console.error('Error uploading image:', err);
+                  // Only show error notification if image upload fails
+                  this.snackBar.open('Product updated but image upload failed', 'Close', { duration: 3000 });
+                }
               });
-            } else {
-              this.dataSource.data = this.dataSource.data.map((p: ProductDTO) => 
-                p.id === updatedProduct.id ? { ...p, ...updatedProduct } : p
-              );
-              this.snackBar.open('Update product successfully', 'Close', { duration: 3000 });
             }
           },
           error: (err: any) => {
@@ -218,14 +234,23 @@ export class ProductAdminComponent implements OnInit {
         const { product, imageFile } = result;
         this.productService.createProduct(product).subscribe({
           next: (created: ProductDTO) => {
+            // Show notification and refresh immediately after product creation
+            this.snackBar.open('Add product successfully', 'Close', { duration: 3000 });
+            this.loadProducts();
+            
+            // Handle image upload silently in the background (if any)
             if (imageFile) {
-              this.productService.uploadProductImage(created.id!, imageFile).subscribe(() => {
-                this.loadProducts();
-                this.snackBar.open('Add product successfully', 'Close', { duration: 3000 });
+              this.productService.uploadProductImage(created.id!, imageFile).subscribe({
+                next: () => {
+                  // Refresh again after image upload to show the new image (silently)
+                  this.loadProducts();
+                },
+                error: (err: any) => {
+                  console.error('Error uploading image:', err);
+                  // Only show error notification if image upload fails
+                  this.snackBar.open('Product created but image upload failed', 'Close', { duration: 3000 });
+                }
               });
-            } else {
-              this.loadProducts();
-              this.snackBar.open('Add product successfully', 'Close', { duration: 3000 });
             }
           },
           error: (err: any) => {

@@ -28,13 +28,13 @@ export class ProductFormModalComponent implements OnInit {
       name: [data.product?.name || '', Validators.required],
       slug: [data.product?.slug || '', Validators.required],
       description: [data.product?.description || ''],
-      price: [data.product?.price || '', [Validators.required, Validators.min(0)]],
-      cost: [data.product?.cost || '', [Validators.required, Validators.min(0)]],
+      price: [data.product?.price || '', [Validators.min(0)]], // Removed required
+      cost: [data.product?.cost || '', [Validators.min(0)]], // Removed required
       salePrice: [data.product?.salePrice || ''],
-      categoryId: [data.product?.categoryId != null ? data.product.categoryId : (data.categories[0]?.id ?? 1), Validators.required],
-      stockQuantity: [data.product?.stockQuantity || 0, [Validators.required, Validators.min(0)]],
-      minStockLevel: [data.product?.minStockLevel || 0, [Validators.min(0)]],
-      maxStockLevel: [data.product?.maxStockLevel || 0, [Validators.min(0)]],
+      categoryId: [data.product?.categoryId != null ? data.product.categoryId : (data.categories[0]?.id ?? 1)], // Removed required
+      stockQuantity: [data.product?.stockQuantity || 100, [Validators.min(0)]], // Removed required
+      minStockLevel: [data.product?.minStockLevel || 0],
+      maxStockLevel: [data.product?.maxStockLevel || 1000],
       // weight and dimensions removed
       brand: [data.product?.brand || ''],
       color: [data.product?.color || ''],
@@ -70,31 +70,34 @@ export class ProductFormModalComponent implements OnInit {
   }
 
   onSave() {
-    if (this.productForm.valid) {
-      const formValue = this.productForm.value;
-      const product: ProductDTO = {
-        id: this.data.product?.id ?? 0,
-        productCode: formValue.productCode,
-        name: formValue.name,
-        slug: formValue.slug,
-        description: formValue.description,
-        price: formValue.price,
-        cost: formValue.cost,
-        salePrice: formValue.salePrice || null,
-        categoryId: +formValue.categoryId,
-        stockQuantity: formValue.stockQuantity,
-        minStockLevel: formValue.minStockLevel,
-        maxStockLevel: formValue.maxStockLevel,
-        brand: formValue.brand || null,
-        color: formValue.color || null,
-        size: formValue.size || null,
-        material: formValue.material || null,
-        tags: formValue.tags || null,
-        isActive: formValue.isActive
-      } as ProductDTO;
-      
-      this.dialogRef.close({ product, imageFile: this.imageFile });
-    }
+    console.log('Save button clicked');
+    console.log('Form valid:', this.productForm.valid);
+    console.log('Form value:', this.productForm.value);
+    
+    const formValue = this.productForm.value;
+    const product: ProductDTO = {
+      id: this.data.product?.id ?? 0,
+      productCode: formValue.productCode,
+      name: formValue.name,
+      slug: formValue.slug,
+      description: formValue.description,
+      price: formValue.price,
+      cost: formValue.cost,
+      salePrice: formValue.salePrice || null,
+      categoryId: +formValue.categoryId,
+      stockQuantity: formValue.stockQuantity,
+      minStockLevel: formValue.minStockLevel||0,
+      maxStockLevel: formValue.maxStockLevel||1000,
+      brand: formValue.brand || null,
+      color: formValue.color || null,
+      size: formValue.size || null,
+      material: formValue.material || null,
+      tags: formValue.tags || null,
+      isActive: formValue.isActive || true
+    } as ProductDTO;
+    
+    console.log('Product to save:', product);
+    this.dialogRef.close({ product, imageFile: this.imageFile });
   }
 
   onCancel() {
