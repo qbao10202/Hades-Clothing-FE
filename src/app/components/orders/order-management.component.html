@@ -300,7 +300,7 @@
                   <tr *ngFor="let item of order.orderItems; let i = index">
                     <td>{{ i + 1 }}</td>
                     <td>
-                      <img [src]="item.product?.images[0]?.imageUrl || 'assets/default-product.png'" 
+                      <img [src]="getProductImageUrl(item)" 
                            alt="Product image" 
                            class="product-thumbnail">
                     </td>

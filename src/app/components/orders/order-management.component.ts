@@ -381,4 +381,18 @@ export class OrderManagementComponent implements OnInit, AfterViewInit {
     this.loadOrders();
     this.loadStats();
   }
+
+  getProductImageUrl(item: any): string {
+    if (item.product && item.product.images && item.product.images.length > 0) {
+      const filename = item.product.images[0].imageUrl;
+      return `${this.getBackendBaseUrl()}/api/products/${item.product.id}/images/${filename}`;
+    }
+    return 'assets/default-product.png';
+  }
+
+  getBackendBaseUrl(): string {
+    // Use environment if available, otherwise fallback
+    // @ts-ignore
+    return (window as any).environment?.apiUrl?.replace(/\/api$/, '') || '';
+  }
 }

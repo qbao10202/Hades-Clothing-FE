@@ -439,10 +439,10 @@ export class ProductImageModalComponent {
     this.sizes = data.sizes || ['S', 'M', 'L', 'XL'];
   }
   getImageUrl(url: string): string {
-    if (url && url.startsWith('/uploads/')) {
-      return this.getBackendBaseUrl() + url;
+    if (url && this.data && this.data.id) {
+      return `${this.getBackendBaseUrl()}/api/products/${this.data.id}/images/${url}`;
     }
-    return url;
+    return 'assets/placeholder.jpg';
   }
   getBackendBaseUrl(): string {
     return environment.apiUrl.replace(/\/api$/, '');

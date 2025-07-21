@@ -177,14 +177,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   getProductImage(item: any): string {
     if (item.product?.images && item.product.images.length > 0) {
       const imageUrl = item.product.images[0].imageUrl;
-      if (imageUrl) {
-        if (imageUrl.startsWith('/uploads')) {
-          return `${this.getBackendBaseUrl()}${imageUrl}`;
-        }
-        if (imageUrl.startsWith('http')) {
-          return imageUrl;
-        }
-        return `${this.getBackendBaseUrl()}/uploads/products/${item.product.id}/${imageUrl}`;
+      if (imageUrl && item.product.id) {
+        return `${this.getBackendBaseUrl()}/api/products/${item.product.id}/images/${imageUrl}`;
       }
     }
     return 'assets/default-product.svg';

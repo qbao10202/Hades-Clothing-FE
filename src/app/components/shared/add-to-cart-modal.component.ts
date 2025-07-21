@@ -323,10 +323,7 @@ export class AddToCartModalComponent implements OnInit {
   getProductImageUrl(): string {
     if (this.product.images && this.product.images.length > 0) {
       const imageUrl = this.product.images[0].imageUrl;
-      if (imageUrl && imageUrl.startsWith('/uploads/')) {
-        return this.getBackendBaseUrl() + imageUrl;
-      }
-      return imageUrl;
+      return `${this.getBackendBaseUrl()}/api/products/${this.product.id}/images/${imageUrl}`;
     }
     return 'assets/placeholder.jpg';
   }
