@@ -12,6 +12,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { OrderService } from '../../services/order.service';
 import { AuthService } from '../../services/auth.service';
 import { Order, OrderStatus, Customer, User, Product, OrderItem } from '../../models';
+import { environment } from '../../../environments/environment';
 
 interface Category {
   id: number;
@@ -391,8 +392,6 @@ export class OrderManagementComponent implements OnInit, AfterViewInit {
   }
 
   getBackendBaseUrl(): string {
-    // Use environment if available, otherwise fallback
-    // @ts-ignore
-    return (window as any).environment?.apiUrl?.replace(/\/api$/, '') || '';
+    return environment.apiUrl.replace(/\/api$/, '');
   }
 }
